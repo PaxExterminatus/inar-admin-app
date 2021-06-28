@@ -1,4 +1,5 @@
 # Project exclude paths
+.idea
+/images/
 /node_modules/
 /public/app/storage/
-.idea

@@ -2,7 +2,7 @@
   <div>
     Storage APP 2
     <div>
-
+      <btn>Save</btn>
     </div>
   </div>
 </template>
@@ -14,7 +14,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-
-</style>
