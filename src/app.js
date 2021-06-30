@@ -7,6 +7,8 @@ import StorageApp from './storage-app/StorageApp'
 
 const storageApp = createApp(StorageApp)
 
+storageApp.config.devtools = true
+
 storageApp
     .use(PrimeVue)
     .mount('#storage-app');

@@ -2,10 +2,16 @@
   <div class="storage-app">
     <Dirs :dirs="kept.dirs"/>
 
-    <EditDialog :state="state.dirEditor"></EditDialog>
+    <EditDialog :state="state.dirEditor">
+      <DirForm :inp="input.dir"/>
+    </EditDialog>
+
+    <EditDialog :state="state.docEditor">
+      <DocForm :inp="input.dir"/>
+    </EditDialog>
 
     <div>
-      <Button @click="state.dirEditor.open()">Edit</Button>
+      <Button @click="state.docEditor.open()">Edit</Button>
     </div>
   </div>
 </template>
@@ -14,13 +20,17 @@
 import Dirs from './custom/Dirs'
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
-import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog';
+import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
+import { DirForm, DocForm } from './custom'
+import { StorageDir } from './entity'
 
 export default {
   components: {
     Button,
     Dirs,
     EditDialog,
+    DirForm,
+    DocForm,
   },
 
   data() {
@@ -32,6 +42,11 @@ export default {
 
       state: {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
+        docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
+      },
+
+      input: {
+        dir: StorageDir.empty('New folder'),
       },
     };
   },

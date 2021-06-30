@@ -1,11 +1,9 @@
 import EditorState from './EditorState'
-import DocEditor from './DocEditor'
-import DocDelete from './DocDelete'
-import DirEditor from './DirEditor'
+import DirForm from './DirForm'
+import DocForm from './DocForm'
 
 export {
-  DocEditor,
   EditorState,
-  DocDelete,
-  DirEditor,
+  DirForm,
+  DocForm,
 }
