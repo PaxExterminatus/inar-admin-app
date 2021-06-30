@@ -1,20 +1,18 @@
 <template>
   <div class="storage-app">
-    <div>{{ kept.docs }}</div>
-    <div>{{ kept.files }}</div>
-    <div>
-      <Button>Save</Button>
-    </div>
+    <Dirs :dirs="kept.dirs"/>
   </div>
 </template>
 
 <script>
+import Dirs from './components/Dirs'
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
 
 export default {
   components: {
     Button,
+    Dirs,
   },
 
   data() {

@@ -6,7 +6,8 @@
   "scripts": {
     "development": "mix",
     "watch": "mix watch",
-    "production": "mix --production"
+    "production": "mix --production",
+    "serve": "serve -s public"
   },
   "keywords": [],
   "author": "",

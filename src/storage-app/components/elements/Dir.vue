@@ -21,6 +21,8 @@
 
 <script>
 export default {
+  name: 'Dir',
+
   props: {
     name: {
       type: String,

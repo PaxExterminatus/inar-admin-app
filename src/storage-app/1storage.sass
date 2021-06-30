@@ -1,0 +1,44 @@
+
+.storage-cmp
+  .column-small
+    width: 70px
+    text-align: center !important
+  .storage-actions
+    @include actions-panel
+    display: flex
+    align-items: center
+  .storage-folders
+    @include actions-panel
+    display: flex
+  .storage-files
+    margin-top: 10px
+  .storage-btn
+    opacity: .8
+    cursor: pointer
+    display: inline-flex
+    justify-content: center
+    align-items: center
+    min-width: 40px
+    min-height: 40px
+    border: 1px solid #dadce0
+    border-radius: 5px
+    &:hover
+      background-color: #dadce0
+  .storage-modal
+    margin-top: 7vh !important
+    min-width: 50vw
+    max-width: 700px
+    .p-dialog-header
+      background-color: #dadce0
+      padding: 15px
+  .storage-nav
+    @include actions-panel
+    color: #202124
+    font-size: 1.1rem
+    display: flex
+    align-items: center
+    .storage-nav-item
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      padding: 5px
