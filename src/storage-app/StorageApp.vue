@@ -1,6 +1,12 @@
 <template>
   <div class="storage-app">
-    <DirDeeping/>
+    <DirDeeping :dirs="nav.dirs"/>
+
+    <div class="actions-panel">
+      <Button class="p-button-outlined" icon="pi pi-plus-circle" title="Create"/>
+      <Button class="p-button-outlined" icon="pi pi-pencil" title="Edit"/>
+      <Button class="p-button-outlined" icon="pi pi-trash" title="Delete"/>
+    </div>
 
     <Dirs :dirs="kept.dirs"/>
 
@@ -11,10 +17,6 @@
     <EditDialog :state="state.docEditor">
       <DocForm :inp="input.dir"/>
     </EditDialog>
-
-    <div>
-      <Button @click="state.docEditor.open()">Edit</Button>
-    </div>
   </div>
 </template>
 
@@ -50,6 +52,10 @@ export default {
 
       input: {
         dir: StorageDir.empty('New folder'),
+      },
+
+      nav: {
+        dirs: [],
       },
     };
   },
