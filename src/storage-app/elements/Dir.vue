@@ -20,9 +20,8 @@
 </template>
 
 <script>
-export default {
-  name: 'Dir',
 
+export default {
   props: {
     name: {
       type: String,

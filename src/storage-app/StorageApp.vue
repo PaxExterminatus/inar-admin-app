@@ -1,5 +1,7 @@
 <template>
   <div class="storage-app">
+    <DirDeeping/>
+
     <Dirs :dirs="kept.dirs"/>
 
     <EditDialog :state="state.dirEditor">
@@ -21,7 +23,7 @@ import Dirs from './custom/Dirs'
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
 import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
-import { DirForm, DocForm } from './custom'
+import { DirForm, DocForm, DirDeeping } from './custom'
 import { StorageDir } from './entity'
 
 export default {
@@ -31,6 +33,7 @@ export default {
     EditDialog,
     DirForm,
     DocForm,
+    DirDeeping,
   },
 
   data() {
