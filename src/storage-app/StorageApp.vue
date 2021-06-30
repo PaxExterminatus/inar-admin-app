@@ -1,18 +1,26 @@
 <template>
   <div class="storage-app">
     <Dirs :dirs="kept.dirs"/>
+
+    <EditDialog :state="state.dirEditor"></EditDialog>
+
+    <div>
+      <Button @click="state.dirEditor.open()">Edit</Button>
+    </div>
   </div>
 </template>
 
 <script>
-import Dirs from './components/Dirs'
+import Dirs from './custom/Dirs'
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
+import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog';
 
 export default {
   components: {
     Button,
     Dirs,
+    EditDialog,
   },
 
   data() {
@@ -20,6 +28,10 @@ export default {
       kept: {
         dirs: [],
         docs: [],
+      },
+
+      state: {
+        dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
       },
     };
   },

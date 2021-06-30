@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Dir from './elements/Dir'
+import Dir from '../elements/Dir'
 
 export default {
   components: {
