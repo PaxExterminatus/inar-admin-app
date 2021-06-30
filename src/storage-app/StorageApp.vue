@@ -3,12 +3,14 @@
     <DirDeeping :dirs="nav.dirs"/>
 
     <div class="actions-panel">
-      <Button class="p-button-outlined" icon="pi pi-plus-circle" title="Create"/>
-      <Button class="p-button-outlined" icon="pi pi-pencil" title="Edit"/>
-      <Button class="p-button-outlined" icon="pi pi-trash" title="Delete"/>
+      <Button class="p-button-secondary p-button-outlined" icon="pi pi-plus-circle" title="Create"/>
+      <Button class="p-button-secondary p-button-outlined" icon="pi pi-pencil" title="Edit"/>
+      <Button class="p-button-secondary p-button-outlined" icon="pi pi-trash" title="Delete"/>
     </div>
 
     <Dirs :dirs="kept.dirs"/>
+
+    <Docs :docs="kept.docs"/>
 
     <EditDialog :state="state.dirEditor">
       <DirForm :inp="input.dir"/>
@@ -21,15 +23,15 @@
 </template>
 
 <script>
-import Dirs from './custom/Dirs'
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
 import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
-import { DirForm, DocForm, DirDeeping } from './custom'
+import { DirForm, DocForm, DirDeeping, Docs, Dirs } from './custom'
 import { StorageDir } from './entity'
 
 export default {
   components: {
+    Docs,
     Button,
     Dirs,
     EditDialog,
