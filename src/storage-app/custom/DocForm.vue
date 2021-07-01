@@ -2,10 +2,10 @@
   <div class="form-component">
     <TabView>
       <TabPanel header="General">
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['name']">
           <label for="name">Name</label>
           <InputText id="name" v-model="input.name"/>
-        </div>
+        </ErrorLine>
 
         <div class="input-line">
           <label for="preview">Preview</label>
@@ -70,6 +70,7 @@ import Textarea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import { ErrorLine } from '../elements'
 
 export default {
   components: {
@@ -77,10 +78,16 @@ export default {
     Textarea,
     TabPanel,
     TabView,
+    ErrorLine,
   },
 
   props: {
     inp: {
+      type: Object,
+      default: () => ({}),
+    },
+
+    errors: {
       type: Object,
       default: () => ({}),
     },

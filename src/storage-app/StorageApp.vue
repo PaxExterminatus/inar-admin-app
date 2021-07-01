@@ -24,7 +24,7 @@
       <DocForm :inp="input.dir"/>
     </EditDialog>
 
-    <EditDialog :state="state.dirRemove" @click="dirRemove">
+    <EditDialog :state="state.dirRemove" @save="dirRemove">
       <p>Do you want to delete this folder? <strong>{{ this.input.dir.name }}</strong></p>
     </EditDialog>
 
@@ -65,7 +65,7 @@ export default {
       state: {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
-        dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder')),
+        dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
       },
 
       input: {
@@ -93,6 +93,9 @@ export default {
           .then(r => {
             this.acceptStorageData(r.data);
             this.state.dirRemove.close();
+          })
+          .catch(e => {
+            this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
           })
           .finally(() => {
             this.state.dirRemove.stop();
@@ -154,6 +157,7 @@ export default {
       this.root.wait();
       this.root.select();
       this.nav.dirs = [];
+      this.input.dir = StorageDir.empty();
       this.getStorage()
           .finally(() => {
             this.root.stop();

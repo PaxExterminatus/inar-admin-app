@@ -5,7 +5,7 @@
 
     <template #footer>
       <Button class="btn-default btn-primary" @click="cancel()">Cancel</Button>
-      <Button class="btn-default btn-primary" @click="save()"><i :class="saveIcon"/> Save</Button>
+      <Button class="btn-default btn-primary" @click="save()"><i :class="saveIcon"/> {{opt.options.yesLabel}}</Button>
     </template>
   </Dialog>
 </template>

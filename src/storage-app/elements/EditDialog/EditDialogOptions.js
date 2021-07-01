@@ -5,6 +5,13 @@ class EditDialogOptions {
         this.header = '';
         this.show = false;
         this.wait = false;
+        this.yesLabel = 'Save';
+        this.noLabel = 'Cancel';
+    }
+
+    yes({label}) {
+        this.yes = label;
+        return this;
     }
 
     static init() {
