@@ -5,15 +5,11 @@
     </Dirs>
 
     <div class="actions">
-      <Button
-          title="Create" icon="pi pi-plus-circle"
-          @click="createNewDir"
-      />
+      <Button title="Create" icon="pi pi-plus-circle" @click="createNewDir"/>
       <template v-if="input.dir.id">
         <Button title="Edit" icon="pi pi-pencil" @click="state.dirEditor.open()"/>
         <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()"/>
       </template>
-
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
@@ -21,7 +17,7 @@
     <Docs :docs="kept.docs"/>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
-      <DirForm :inp="input.dir"/>
+      <DirForm :inp="input.dir" :errors="errors.dir"/>
     </EditDialog>
 
     <EditDialog :state="state.docEditor">
@@ -31,6 +27,8 @@
     <EditDialog :state="state.dirRemove" @click="dirRemove">
       <p>Do you want to delete this folder? <strong>{{ this.input.dir.name }}</strong></p>
     </EditDialog>
+
+    <Toast/>
   </div>
 </template>
 
@@ -41,6 +39,7 @@ import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditD
 import { DirForm, DocForm, Docs, Dirs } from './custom'
 import { StorageDir, StorageDoc } from './entity'
 import { Dir } from './elements';
+import Toast from 'primevue/toast';
 
 export default {
   components: {
@@ -51,6 +50,7 @@ export default {
     DirForm,
     DocForm,
     Dir,
+    Toast,
   },
 
   data() {
@@ -71,6 +71,10 @@ export default {
       input: {
         dir: StorageDir.empty(),
         doc: StorageDoc.empty(),
+      },
+
+      errors: {
+        dir: {},
       },
 
       nav: {
@@ -96,10 +100,15 @@ export default {
     },
 
     dirSave() {
+      this.errors.dir = [];
       storageClient.save(this.input.dir)
           .then(r => {
             this.acceptStorageData(r.data);
             this.state.dirEditor.close();
+          })
+          .catch(e => {
+            this.errors.dir = e.response.data.errors;
+            this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
           })
           .finally(() => {
             this.state.dirEditor.stop();
