@@ -23,7 +23,7 @@
     </EditDialog>
 
     <EditDialog :state="state.docEditor" @save="docSave">
-      <DocForm :inp="input.dir"/>
+      <DocForm :inp="input.dir" :errors="errors.doc"/>
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
@@ -97,10 +97,11 @@ export default {
       storageClient.save(this.input.doc)
           .then(r => {
             this.acceptStorageData(r.data);
+            this.state.docEditor.close();
           })
           .catch(e => {
-            this.errors.dir = e.response.data.errors;
-            this.state.docEditor.close();
+            this.errors.doc = e.response.data.errors;
+            this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
           })
           .finally(() => {
             this.state.docEditor.stop();

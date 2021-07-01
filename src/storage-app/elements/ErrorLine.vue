@@ -38,6 +38,8 @@ export default {
 
 <style lang="sass">
 .error-line
+  label
+    margin-bottom: 5px
   &.invalid
     input
       border-color: #f44336 !important
