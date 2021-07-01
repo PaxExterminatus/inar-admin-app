@@ -99,7 +99,7 @@ class StorageClient {
     if (doc.name) form.append('name', doc.name);
     if (doc.parent_id) form.append('parent_id', doc.parent_id);
 
-    return axios.post('/api/admin/storage', form, config);
+    return axios.post('/storage', form, config);
   }
 
   uploadCancel() {
@@ -112,7 +112,7 @@ class StorageClient {
    * @return Promise<StorageGetResponse>
    */
   delete(id) {
-    return axios.delete(`/api/admin/storage/${id}`);
+    return axios.delete(`/storage/${id}`);
   }
 
   static make() {

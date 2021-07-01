@@ -9,11 +9,11 @@
           title="Create" icon="pi pi-plus-circle"
           @click="createNewDir"
       />
-      <Button
-          title="Edit" icon="pi pi-pencil"
-          @click="state.dirEditor.open()"/>
-      <Button
-          title="Delete" icon="pi pi-trash"/>
+      <template v-if="input.dir.id">
+        <Button title="Edit" icon="pi pi-pencil" @click="state.dirEditor.open()"/>
+        <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()"/>
+      </template>
+
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
@@ -26,6 +26,10 @@
 
     <EditDialog :state="state.docEditor">
       <DocForm :inp="input.dir"/>
+    </EditDialog>
+
+    <EditDialog :state="state.dirRemove" @click="dirRemove">
+      <p>Do you want to delete this folder? <strong>{{ this.input.dir.name }}</strong></p>
     </EditDialog>
   </div>
 </template>
@@ -61,6 +65,7 @@ export default {
       state: {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
+        dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder')),
       },
 
       input: {
@@ -75,11 +80,21 @@ export default {
   },
 
   mounted() {
-    this.getStorage();
-    this.root.select();
+    this.rootSelect();
   },
 
   methods: {
+    dirRemove() {
+      storageClient.delete(this.input.dir.id)
+          .then(r => {
+            this.acceptStorageData(r.data);
+            this.state.dirRemove.close();
+          })
+          .finally(() => {
+            this.state.dirRemove.stop();
+          });
+    },
+
     dirSave() {
       storageClient.save(this.input.dir)
           .then(r => {
@@ -102,7 +117,11 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirSelect(dir) {
+      this.root.unSelect();
       this.input.dir = dir;
+      this.nav.dirs.forEach(iDir => {
+        iDir.unSelect();
+      });
     },
     /** @param {StorageDir} dir */
     dirOpen(dir) {
