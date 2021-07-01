@@ -4,16 +4,16 @@
       <Dir :dir="root" @select="rootSelect"/>
     </Dirs>
 
-    <div class="actions-panel">
+    <div class="actions">
       <Button
-          title="Create" class="p-button-secondary p-button-outlined" icon="pi pi-plus-circle"
+          title="Create" icon="pi pi-plus-circle"
           @click="createNewDir"
       />
       <Button
-          title="Edit" class="p-button-secondary p-button-outlined" icon="pi pi-pencil"
+          title="Edit" icon="pi pi-pencil"
           @click="state.dirEditor.open()"/>
       <Button
-          title="Delete" class="p-button-secondary p-button-outlined" icon="pi pi-trash"/>
+          title="Delete" icon="pi pi-trash"/>
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>

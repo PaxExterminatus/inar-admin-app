@@ -1,11 +1,18 @@
 @import 'sass/panels'
 
+.storage-app
+  background-color: #fff
+  padding: 5px
+  border-radius: 5px
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .05)
 .dirs
   @include tile-panel
 .dir-deeping
   @include tile-panel
-.actions-panel
+.actions
   @include tile-panel
+  & > button
+    margin: 5px
 
 .edit-dialog-component
   margin-top: 7vh !important
