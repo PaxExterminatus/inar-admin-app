@@ -1,6 +1,8 @@
 <template>
   <div class="storage-app">
-    <DirDeeping :dirs="nav.dirs"/>
+    <Dirs :dirs="nav.dirs">
+      <Dir :dir="root" @select="rootSelect"/>
+    </Dirs>
 
     <div class="actions-panel">
       <Button class="p-button-secondary p-button-outlined" icon="pi pi-plus-circle" title="Create"/>
@@ -26,8 +28,9 @@
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
 import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
-import { DirForm, DocForm, DirDeeping, Docs, Dirs } from './custom'
-import { StorageDir } from './entity'
+import { DirForm, DocForm, Docs, Dirs } from './custom'
+import { StorageDir, StorageDoc } from './entity'
+import { Dir } from './elements';
 
 export default {
   components: {
@@ -37,11 +40,13 @@ export default {
     EditDialog,
     DirForm,
     DocForm,
-    DirDeeping,
+    Dir,
   },
 
   data() {
     return {
+      root: StorageDir.empty('Storage'),
+
       kept: {
         dirs: [],
         docs: [],
@@ -54,6 +59,7 @@ export default {
 
       input: {
         dir: StorageDir.empty('New folder'),
+        doc: StorageDoc.empty(),
       },
 
       nav: {
@@ -63,11 +69,49 @@ export default {
   },
 
   mounted() {
-    storageClient.get()
-        .then(r => {
-          this.kept.dirs = r.data.dirs;
-          this.kept.docs = r.data.docs;
+    this.getStorage();
+  },
+
+  methods: {
+    rootSelect() {
+      this.root.wait();
+      this.getStorage()
+          .finally(() => {
+            this.root.stop();
+          });
+    },
+
+    getStorage() {
+      return storageClient.get()
+          .then(r => {
+            this.acceptStorageData(r.data)
+          });
+    },
+
+    acceptStorageData(data) {
+      this.kept.docs = data.docs.map(doc => {
+        return new StorageDoc({
+          id: doc.id,
+          size: doc.size,
+          state: 'kept',
+          name: doc.name,
+          parent_id: doc.parent_id,
+          file: null,
+          props: doc.props || {}
         });
-  }
+      });
+
+      this.kept.dirs = data.dirs.map(dir => {
+        return new StorageDir({
+          id: dir.id,
+          state: 'kept',
+          size: dir.size,
+          name: dir.name,
+          parent_id: dir.parent_id,
+          props: dir.props || {},
+        });
+      });
+    },
+  },
 }
 </script>

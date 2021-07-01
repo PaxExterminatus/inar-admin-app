@@ -89,11 +89,11 @@ class StorageDoc extends StorageItem {
   /**
    * @return {StorageDoc}
    */
-  static empty() {
+  static empty(name = '') {
     return new StorageDoc({
       id: null,
       parent_id: null,
-      name: '',
+      name,
       size: 0,
       state: 'local',
       props: new DocProps(),

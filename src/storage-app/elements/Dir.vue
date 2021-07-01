@@ -1,11 +1,11 @@
 <template>
-  <div class="folder-cmp" :class="classes">
+  <div class="folder-cmp" :class="classes" @click="click">
 
-    <template v-if="loading">
+    <template v-if="storageDir.state.loading">
       <i class="folder-icon pi pi-spin pi-spinner"/>
     </template>
 
-    <template v-else-if="root">
+    <template v-else-if="storageDir.state.type === 'root'">
       <i class="folder-icon pi pi-cloud"/>
     </template>
 
@@ -14,38 +14,39 @@
     </template>
 
     <span class="folder-name">
-      {{ name }}
+      {{ storageDir.name }}
     </span>
   </div>
 </template>
 
 <script>
+import { StorageDir } from '../entity'
 
 export default {
   props: {
-    name: {
-      type: String,
-      default: '',
-    },
-    selected: {
-      type: Boolean,
-      default: false,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    root: {
-      type: Boolean,
-      default: false,
+    dir: {
+      type: Object,
+      default: () => StorageDir.empty(),
     },
   },
 
   computed: {
+    /** @returns {StorageDir|Object} */
+    storageDir() {
+      return this.dir;
+    },
+
     classes() {
       return {
-        selected: this.selected,
+        selected: this.storageDir.state.selected,
       };
+    },
+  },
+
+  methods: {
+    click() {
+      this.storageDir.select();
+      this.$emit('select');
     },
   },
 }

@@ -1,7 +1,8 @@
 <template>
   <div class="dirs">
+    <slot></slot>
     <template v-for="dir in dirs">
-      <Dir :name="dir.name"/>
+      <Dir :dir="dir"/>
     </template>
   </div>
 </template>

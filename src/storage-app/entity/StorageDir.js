@@ -8,6 +8,14 @@ class DirProps {
   }
 }
 
+class DirSate {
+  constructor({selected = false, loading = false, type = 'kept'}) {
+    this.selected = selected;
+    this.loading = loading;
+    this.type = type;
+  }
+}
+
 class StorageDir extends StorageItem {
   /**
    * @param {?string} id
@@ -19,20 +27,14 @@ class StorageDir extends StorageItem {
    */
   constructor({id, parent_id, name, size, state, props}) {
     super({id, parent_id, name, size, state, type: 'dir', props});
+    this.state = new DirSate({});
   }
 
-  /**
-   * @param {DirProps} props
-   * @return {DirProps}
-   */
   makeProps(props) {
     return new DirProps(props);
   }
 
-  /**
-   * @return {StorageDir}
-   */
-  static empty(name) {
+  static empty(name = '') {
     return new StorageDir({
       id: null,
       parent_id: null,
@@ -43,12 +45,15 @@ class StorageDir extends StorageItem {
     })
   }
 
-  /**
-   * @param {StorageItem} parent
-   * @return {StorageItem}
-   */
-  static make(parent) {
-    return StorageDir.makeNew('New folder', parent, 'dir');
+  select() {
+    this.state.selected = true;
+  }
+
+  wait() {
+    this.state.loading = true;
+  }
+  stop() {
+    this.state.loading = false;
   }
 }
 
