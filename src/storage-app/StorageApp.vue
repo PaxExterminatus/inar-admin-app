@@ -76,6 +76,7 @@ export default {
 
   mounted() {
     this.getStorage();
+    this.root.select();
   },
 
   methods: {
@@ -107,7 +108,11 @@ export default {
     dirOpen(dir) {
       this.input.dir = dir;
       this.getStorageDir(dir);
+      this.nav.dirs.forEach(iDir => {
+        iDir.unSelect();
+      });
       this.nav.dirs.push(dir);
+      this.root.unSelect();
     },
     /** @param {StorageDir} dir */
     dirOpenNav(dir) {
@@ -119,6 +124,7 @@ export default {
 
     rootSelect() {
       this.root.wait();
+      this.root.select();
       this.nav.dirs = [];
       this.getStorage()
           .finally(() => {
