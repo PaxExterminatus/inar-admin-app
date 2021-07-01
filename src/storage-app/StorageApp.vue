@@ -10,6 +10,8 @@
         <Button title="Edit" icon="pi pi-pencil" @click="state.dirEditor.open()"/>
         <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()"/>
       </template>
+      <Divider layout="vertical"/>
+      <Button title="Create document" icon="pi pi-cloud-upload" @click="state.docEditor.open()"/>
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
@@ -33,6 +35,7 @@
 </template>
 
 <script>
+import Divider from 'primevue/divider'
 import Button from 'primevue/button'
 import { storageClient } from '../api/StorageClient'
 import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
@@ -51,6 +54,7 @@ export default {
     DocForm,
     Dir,
     Toast,
+    Divider,
   },
 
   data() {

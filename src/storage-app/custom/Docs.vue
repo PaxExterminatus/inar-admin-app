@@ -18,7 +18,7 @@
 
     <Column header="Actions">
       <template #body="slotProps">
-        Actions
+
       </template>
     </Column>
   </DataTable>
