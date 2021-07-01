@@ -23,7 +23,7 @@
     </EditDialog>
 
     <EditDialog :state="state.docEditor" @save="docSave">
-      <DocForm :inp="input.dir" :errors="errors.doc"/>
+      <DocForm :inp="input.doc" :errors="errors.doc"/>
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">

@@ -74,6 +74,7 @@ class StorageClient {
    * @return {Promise<StorageSaveResponse>}
    */
   save(item) {
+    console.log('save', item);
     return axios.put('/storage', item);
   }
 
