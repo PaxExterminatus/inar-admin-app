@@ -7,47 +7,47 @@
           <InputText id="name" v-model="input.name"/>
         </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.preview']">
           <label for="preview">Preview</label>
-          <InputText id="preview" v-model="input.preview"/>
-        </div>
+          <InputText id="preview" v-model="input.props.preview"/>
+        </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.url']">
           <label for="url">URL</label>
-          <InputText id="url" v-model="input.url"/>
-        </div>
+          <InputText id="url" v-model="input.props.url"/>
+        </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.polygons']">
           <label for="polygons">Polygons</label>
-          <InputText type="number" id="polygons" v-model="input.polygons"/>
-        </div>
+          <InputText type="number" id="polygons" v-model="input.props.polygons"/>
+        </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.size']">
           <label for="size">Size</label>
-          <InputText type="number" id="size" v-model="input.size"/>
-        </div>
+          <InputText id="size" type="number" v-model="input.props.size"/>
+        </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.description']">
           <label for="description">Description</label>
           <Textarea id="description" v-model="input.props.description" :autoResize="true"/>
-        </div>
+        </ErrorLine>
       </TabPanel>
 
       <TabPanel header="Other">
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.note']">
           <label for="note">Note</label>
-          <InputText id="note" v-model="input.note"/>
-        </div>
+          <InputText id="note" v-model="input.props.note"/>
+        </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.topic']">
           <label for="Topic">Topic</label>
-          <InputText id="topic" v-model="input.topic"/>
-        </div>
+          <InputText id="topic" v-model="input.props.topic"/>
+        </ErrorLine>
 
-        <div class="input-line">
+        <ErrorLine class="input-line" :errors="errors['props.thesis']">
           <label for="Thesis">Thesis</label>
-          <InputText id="thesis" v-model="input.thesis"/>
-        </div>
+          <InputText id="thesis" v-model="input.props.thesis"/>
+        </ErrorLine>
       </TabPanel>
 
       <TabPanel header="File" v-if="input.file">

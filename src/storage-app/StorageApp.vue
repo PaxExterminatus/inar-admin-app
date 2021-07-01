@@ -22,7 +22,7 @@
       <DirForm :inp="input.dir" :errors="errors.dir"/>
     </EditDialog>
 
-    <EditDialog :state="state.docEditor">
+    <EditDialog :state="state.docEditor" @save="docSave">
       <DocForm :inp="input.dir"/>
     </EditDialog>
 
@@ -79,6 +79,7 @@ export default {
 
       errors: {
         dir: {},
+        doc: {},
       },
 
       nav: {
@@ -92,6 +93,20 @@ export default {
   },
 
   methods: {
+    docSave() {
+      storageClient.save(this.input.doc)
+          .then(r => {
+            this.acceptStorageData(r.data);
+          })
+          .catch(e => {
+            this.errors.dir = e.response.data.errors;
+            this.state.docEditor.close();
+          })
+          .finally(() => {
+            this.state.docEditor.stop();
+          });
+    },
+
     dirRemove() {
       storageClient.delete(this.input.dir.id)
           .then(r => {
