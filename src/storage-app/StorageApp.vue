@@ -6,11 +6,11 @@
 
     <div class="actions-panel">
       <Button class="p-button-secondary p-button-outlined" icon="pi pi-plus-circle" title="Create"/>
-      <Button class="p-button-secondary p-button-outlined" icon="pi pi-pencil" title="Edit"/>
+      <Button class="p-button-secondary p-button-outlined" icon="pi pi-pencil" title="Edit" @click="state.dirEditor.open()"/>
       <Button class="p-button-secondary p-button-outlined" icon="pi pi-trash" title="Delete"/>
     </div>
 
-    <Dirs :dirs="kept.dirs"/>
+    <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
     <Docs :docs="kept.docs"/>
 
@@ -73,8 +73,20 @@ export default {
   },
 
   methods: {
+    /** @param {StorageDir} dir */
+    dirSelect(dir) {
+      this.input.dir = dir;
+    },
+    /** @param {StorageDir} dir */
+    dirOpen(dir) {
+      this.input.dir = dir;
+      this.getStorageDir(dir.id);
+      this.nav.dirs.push(dir);
+    },
+
     rootSelect() {
       this.root.wait();
+      this.nav.dirs = [];
       this.getStorage()
           .finally(() => {
             this.root.stop();
@@ -83,6 +95,13 @@ export default {
 
     getStorage() {
       return storageClient.get()
+          .then(r => {
+            this.acceptStorageData(r.data)
+          });
+    },
+
+    getStorageDir(id) {
+      return storageClient.get(id)
           .then(r => {
             this.acceptStorageData(r.data)
           });

@@ -1,11 +1,11 @@
 <template>
-  <div class="folder-cmp" :class="classes" @click="click">
+  <div class="folder-cmp" :class="classes" @click="select" @dblclick="open">
 
-    <template v-if="storageDir.state.loading">
+    <template v-if="folder.state.loading">
       <i class="folder-icon pi pi-spin pi-spinner"/>
     </template>
 
-    <template v-else-if="storageDir.state.type === 'root'">
+    <template v-else-if="folder.state.type === 'root'">
       <i class="folder-icon pi pi-cloud"/>
     </template>
 
@@ -14,7 +14,7 @@
     </template>
 
     <span class="folder-name">
-      {{ storageDir.name }}
+      {{ folder.name }}
     </span>
   </div>
 </template>
@@ -32,21 +32,23 @@ export default {
 
   computed: {
     /** @returns {StorageDir|Object} */
-    storageDir() {
+    folder() {
       return this.dir;
     },
 
     classes() {
       return {
-        selected: this.storageDir.state.selected,
+        selected: this.folder.state.selected,
       };
     },
   },
 
   methods: {
-    click() {
-      this.storageDir.select();
-      this.$emit('select');
+    select() {
+      this.$emit('select', this.folder);
+    },
+    open() {
+      this.$emit('open', this.folder);
     },
   },
 }

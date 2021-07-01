@@ -48,6 +48,9 @@ class StorageDir extends StorageItem {
   select() {
     this.state.selected = true;
   }
+  unSelect() {
+    this.state.selected = false;
+  }
 
   wait() {
     this.state.loading = true;
