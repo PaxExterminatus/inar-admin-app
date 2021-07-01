@@ -1,20 +1,26 @@
 <template>
   <div class="storage-app">
-    <Dirs :dirs="nav.dirs">
+    <Dirs :dirs="nav.dirs" @select="dirOpenNav">
       <Dir :dir="root" @select="rootSelect"/>
     </Dirs>
 
     <div class="actions-panel">
-      <Button class="p-button-secondary p-button-outlined" icon="pi pi-plus-circle" title="Create"/>
-      <Button class="p-button-secondary p-button-outlined" icon="pi pi-pencil" title="Edit" @click="state.dirEditor.open()"/>
-      <Button class="p-button-secondary p-button-outlined" icon="pi pi-trash" title="Delete"/>
+      <Button
+          title="Create" class="p-button-secondary p-button-outlined" icon="pi pi-plus-circle"
+          @click="createNewDir"
+      />
+      <Button
+          title="Edit" class="p-button-secondary p-button-outlined" icon="pi pi-pencil"
+          @click="state.dirEditor.open()"/>
+      <Button
+          title="Delete" class="p-button-secondary p-button-outlined" icon="pi pi-trash"/>
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
     <Docs :docs="kept.docs"/>
 
-    <EditDialog :state="state.dirEditor">
+    <EditDialog :state="state.dirEditor" @save="dirSave">
       <DirForm :inp="input.dir"/>
     </EditDialog>
 
@@ -58,7 +64,7 @@ export default {
       },
 
       input: {
-        dir: StorageDir.empty('New folder'),
+        dir: StorageDir.empty(),
         doc: StorageDoc.empty(),
       },
 
@@ -73,6 +79,26 @@ export default {
   },
 
   methods: {
+    dirSave() {
+      storageClient.save(this.input.dir)
+          .then(r => {
+            this.acceptStorageData(r.data);
+            this.state.dirEditor.close();
+          })
+          .finally(() => {
+            this.state.dirEditor.stop();
+          });
+    },
+    createNewDir() {
+      if (this.nav.dirs.length) {
+        /** @type {StorageDir} */
+        const parent = this.nav.dirs.slice(-1).pop();
+        this.input.dir = parent.makeChild();
+      } else {
+        this.input.dir = StorageDir.empty('New folder');
+      }
+      this.state.dirEditor.open();
+    },
     /** @param {StorageDir} dir */
     dirSelect(dir) {
       this.input.dir = dir;
@@ -80,8 +106,15 @@ export default {
     /** @param {StorageDir} dir */
     dirOpen(dir) {
       this.input.dir = dir;
-      this.getStorageDir(dir.id);
+      this.getStorageDir(dir);
       this.nav.dirs.push(dir);
+    },
+    /** @param {StorageDir} dir */
+    dirOpenNav(dir) {
+      this.input.dir = dir;
+      this.getStorageDir(dir);
+      const position = this.nav.dirs.findIndex(iDir => iDir.id === dir.id);
+      this.nav.dirs = this.nav.dirs.filter((dir, index) => index <= position)
     },
 
     rootSelect() {
@@ -99,11 +132,15 @@ export default {
             this.acceptStorageData(r.data)
           });
     },
-
-    getStorageDir(id) {
-      return storageClient.get(id)
+    /** @param {StorageDir} dir */
+    getStorageDir(dir) {
+      dir.wait();
+      return storageClient.get(dir.id)
           .then(r => {
             this.acceptStorageData(r.data)
+          })
+          .finally(() => {
+            dir.stop();
           });
     },
 

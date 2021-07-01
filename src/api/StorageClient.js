@@ -1,4 +1,5 @@
 import axios from 'axios'
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api/admin';
 
 /**
  * @typedef {{
@@ -62,7 +63,7 @@ class StorageClient {
    * @returns {Promise<StorageGetResponse>}
    */
   get(id= null) {
-    let url = 'http://127.0.0.1:8000/api/admin/storage';
+    let url = '/storage';
     if (id) url += `/${id}`;
 
     return axios.get(url);
@@ -73,7 +74,7 @@ class StorageClient {
    * @return {Promise<StorageSaveResponse>}
    */
   save(item) {
-    return axios.put('/api/admin/storage', item);
+    return axios.put('/storage', item);
   }
 
   /**

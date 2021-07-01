@@ -17,7 +17,7 @@ class EditDialogState {
         return this.options.show;
     }
 
-    get wait() {
+    get loading() {
         return this.options.wait;
     }
 
@@ -30,6 +30,13 @@ class EditDialogState {
     }
     close() {
         this.options.show = false;
+    }
+
+    wait() {
+        this.options.wait = true;
+    }
+    stop() {
+        this.options.wait = false;
     }
 }
 

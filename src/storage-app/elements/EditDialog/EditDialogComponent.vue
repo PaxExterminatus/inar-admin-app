@@ -34,12 +34,13 @@ export default {
       return this.state;
     },
     saveIcon() {
-      return this.opt.wait ? 'pi pi-spinner pi-spin' : 'pi pi-check';
+      return this.opt.loading ? 'pi pi-spinner pi-spin' : 'pi pi-check';
     },
   },
 
   methods: {
     save() {
+      this.opt.wait();
       this.$emit('save');
     },
     cancel() {
@@ -49,3 +50,8 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.pi
+  margin-right: 5px
+</style>

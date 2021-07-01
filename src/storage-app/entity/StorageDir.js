@@ -58,6 +58,17 @@ class StorageDir extends StorageItem {
   stop() {
     this.state.loading = false;
   }
+
+  makeChild() {
+    return new StorageDir({
+      id: null,
+      parent_id: this.id,
+      name: 'New folder',
+      size: 0,
+      state: 'local',
+      props: new DirProps(),
+    })
+  }
 }
 
 export default StorageDir;
