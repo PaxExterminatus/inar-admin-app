@@ -89,6 +89,9 @@ export default {
   border-radius: 5px
   cursor: pointer
   min-width: 200px
+  &:hover
+    .tag
+      opacity: 1
   &.selected
     background-color: #e8f0fe
     color: #1967d2
@@ -110,12 +113,13 @@ export default {
     right: 0
     top: 0
     height: 100%
-    .tag
-      display: flex
-      align-items: center
-      justify-content: center
-      flex: 1
-      text-align: center
+  .tag
+    display: flex
+    align-items: center
+    justify-content: center
+    flex: 1
+    text-align: center
+    opacity: 0
     .pi
       font-weight: normal
       font-size: 10px
