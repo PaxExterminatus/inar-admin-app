@@ -38,7 +38,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000/api/admin';
 
 /**
  * @typedef {{
- *   id: number
+ *   id: string
  *   name: string
  *   parent_id: number
  *   size: number

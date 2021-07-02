@@ -1,7 +1,15 @@
 <template>
-  <div class="form-component">
+  <div class="form-component doc-form">
     <TabView>
       <TabPanel header="Model">
+        <div class="actions">
+          <input type="file" ref="storageFileInput" hidden @change="storageFileInputChange">
+          <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
+          <template v-if="input.file">
+            <span class="file-name">{{ input.file.name }}</span>
+          </template>
+        </div>
+
         <ErrorLine class="input-line" :errors="errors['name']">
           <label for="name">Name</label>
           <InputText id="name" v-model="input.name"/>
@@ -9,22 +17,27 @@
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <label for="size">Size</label>
-          <InputText id="size" type="number" v-model="input.props.size"/>
+          <InputNumber id="size" v-model="input.props.size" showButtons/>
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.polygons']">
           <label for="polygons">Polygons</label>
-          <InputText type="number" id="polygons" v-model="input.props.polygons"/>
+          <InputNumber id="polygons" v-model="input.props.polygons" showButtons/>
         </ErrorLine>
       </TabPanel>
 
-      <TabPanel header="Preview">
+      <TabPanel header="Cover">
+        <div class="actions">
+          <input type="file" ref="storagePreviewInput" hidden @change="storagePreviewInputChange">
+          <Button title="Select file" icon="pi pi-folder-open" @click="storagePreviewInputOpen"/>
+        </div>
+
         <ErrorLine class="input-line" :errors="errors['props.preview']">
           <label for="preview">Preview</label>
           <InputText id="preview" v-model="input.props.preview"/>
         </ErrorLine>
 
-        <Divider align="center">
+        <Divider :align="'center'">
           <span class="p-tag">OR</span>
         </Divider>
 
@@ -56,17 +69,6 @@
         </ErrorLine>
       </TabPanel>
 
-      <TabPanel header="File" v-if="input.file">
-        <div>
-          <span>File name</span>
-          <span>{{ input.file.name }}</span>
-        </div>
-
-        <div>
-          <span>File size</span>
-          <span>{{ input.file.size }}</span>
-        </div>
-      </TabPanel>
     </TabView>
   </div>
 </template>
@@ -78,6 +80,8 @@ import InputText from 'primevue/inputtext'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import { ErrorLine } from '../elements'
+import Button from 'primevue/button'
+import InputNumber from 'primevue/inputnumber'
 
 export default {
   components: {
@@ -87,6 +91,8 @@ export default {
     TabView,
     ErrorLine,
     Divider,
+    Button,
+    InputNumber,
   },
 
   props: {
@@ -102,10 +108,39 @@ export default {
   },
 
   computed: {
-    /** @returns {StorageDir|Object} */
+    /** @returns {StorageDoc|Object} */
     input() {
       return this.inp;
     },
   },
+
+  methods: {
+    storagePreviewInputOpen() {
+      this.$refs.storagePreviewInput.click();
+    },
+
+    storagePreviewInputChange() {
+      const file = this.$refs.storagePreviewInput.files[0];
+      this.input.props.preview = file.name;
+    },
+
+    storageFileInputOpen() {
+      this.$refs.storageFileInput.click();
+    },
+
+    storageFileInputChange() {
+      const file = this.$refs.storageFileInput.files[0];
+      this.input.file = file;
+      this.input.name = file.name;
+      this.input.props.size = file.size;
+    },
+  },
 }
 </script>
+
+<style lang="sass">
+.doc-form
+  .file-name
+    display: flex
+    align-items: center
+</style>

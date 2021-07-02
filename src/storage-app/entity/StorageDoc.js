@@ -1,7 +1,9 @@
 import StorageItem from './StorageItem';
 
 class DocProps {
-  constructor({preview = null, url = null, polygons = null, size = null, description = null, note = null, topic = null, thesis = null} = {}) {
+  constructor({preview = null, url = null, polygons = null, size = null,
+                description = null, note = null,
+                topic = null, thesis = null, cover = null} = {}) {
     this.preview = preview;
     this.url = url;
     this.polygons = polygons;
@@ -10,6 +12,7 @@ class DocProps {
     this.note = note;
     this.topic = topic;
     this.thesis = thesis;
+    this.cover = cover;
   }
 }
 
@@ -21,9 +24,9 @@ class StorageDoc extends StorageItem {
    * @param {number} size
    * @param {('local'|'kept'|'loading')} state
    * @param {DocProps} props
-   * @param {File} file
+   * @param {?File} file
    */
-  constructor({id, parent_id, name, size, state, props, file}) {
+  constructor({id, parent_id, name, size, state, props, file = null}) {
     super({id, parent_id, name, type: 'doc', props});
     this.size = size;
     this.state = state;
@@ -63,7 +66,7 @@ class StorageDoc extends StorageItem {
       name: this.name,
       state: this.state,
       size: this.size,
-      file: this.file,
+      props: this.props,
     });
   }
 
@@ -89,10 +92,10 @@ class StorageDoc extends StorageItem {
   /**
    * @return {StorageDoc}
    */
-  static empty(name = '') {
+  static empty({name = '', parent_id = null} = {name: '', parent_id: null}) {
     return new StorageDoc({
       id: null,
-      parent_id: null,
+      parent_id,
       name,
       size: 0,
       state: 'local',

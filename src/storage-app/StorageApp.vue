@@ -11,12 +11,12 @@
         <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()"/>
       </template>
       <Divider layout="vertical"/>
-      <Button title="Create document" icon="pi pi-cloud-upload" @click="state.docEditor.open()"/>
+      <Button title="Create document" icon="pi pi-cloud-upload" @click="docCreate"/>
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <Docs :docs="kept.docs"/>
+    <Docs :docs="kept.docs" @edit="docEdit"/>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
       <DirForm :inp="input.dir" :errors="errors.dir"/>
@@ -27,7 +27,7 @@
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
-      <p>Do you want to delete this folder? <strong>{{ this.input.dir.name }}</strong></p>
+      <p>Do you want to delete this folder? <strong>{{ input.dir.name }}</strong></p>
     </EditDialog>
 
     <Toast/>
@@ -37,12 +37,13 @@
 <script>
 import Divider from 'primevue/divider'
 import Button from 'primevue/button'
+import Toast from 'primevue/toast';
 import { storageClient } from '../api/StorageClient'
 import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
 import { DirForm, DocForm, Docs, Dirs } from './custom'
 import { StorageDir, StorageDoc } from './entity'
 import { Dir } from './elements';
-import Toast from 'primevue/toast';
+import FileSize from './services/FileSize'
 
 export default {
   components: {
@@ -93,17 +94,52 @@ export default {
   },
 
   methods: {
+    /** @param {StorageDoc} doc */
+    docEdit(doc) {
+      this.input.doc = doc.copy();
+      this.state.docEditor.open();
+    },
+
+    docCreate() {
+      this.state.docEditor.open();
+      const parent = this.nav.dirs.slice(-1).pop();
+      this.input.doc = new StorageDoc.empty({parent_id: parent.id});
+    },
+
+    /** @param {ProgressEvent} e */
+    uploadProgress(e) {
+      this.state.progress = FileSize.inBytes(e.total).percent(e.loaded);
+    },
+
     docSave() {
       storageClient.save(this.input.doc)
           .then(r => {
             this.acceptStorageData(r.data);
-            this.state.docEditor.close();
+            this.input.doc.id = r.data.item.id;
+            if (this.input.doc.file || this.input.doc.preview)
+            {
+              storageClient.upload(this.input.doc, this.uploadProgress)
+                  .then(r => {
+                    this.state.docEditor.close();
+                    this.input.doc = StorageDoc.empty();
+                    this.acceptStorageData(r.data);
+                  })
+                  .catch(e => {
+                    this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
+                  })
+                  .finally(() => {
+                    this.state.docEditor.stop();
+                  });
+            } else {
+              this.input.doc = StorageDoc.empty();
+              this.acceptStorageData(r.data);
+              this.state.docEditor.stop();
+              this.state.docEditor.close();
+            }
           })
           .catch(e => {
             this.errors.doc = e.response.data.errors;
             this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
-          })
-          .finally(() => {
             this.state.docEditor.stop();
           });
     },

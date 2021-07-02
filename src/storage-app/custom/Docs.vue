@@ -10,7 +10,7 @@
 
     <Column field="preview" header="Preview">
       <template #body="slotProps">
-        <img :src="slotProps.data.preview" class="product-image"/>
+        <img :src="slotProps.data.props.cover" class="product-image"/>
       </template>
     </Column>
 
@@ -18,7 +18,7 @@
 
     <Column header="Actions">
       <template #body="slotProps">
-
+        <Button title="Edit" icon="pi pi-pencil" @click="edit(slotProps.data)"/>
       </template>
     </Column>
   </DataTable>
@@ -27,17 +27,25 @@
 <script>
 import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
+import Button from 'primevue/button'
 
 export default {
   components: {
     Column,
     DataTable,
+    Button,
   },
 
   props: {
     docs: {
       type: Array,
       default: () => [],
+    },
+  },
+
+  methods: {
+    edit(doc) {
+      this.$emit('edit', doc);
     },
   },
 }
