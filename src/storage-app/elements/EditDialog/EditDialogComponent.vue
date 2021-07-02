@@ -1,6 +1,11 @@
 <template>
-  <Dialog class="edit-dialog-component" position="top" :modal="true" :header="opt.header" v-model:visible="opt.show">
-
+  <Dialog
+      class="edit-dialog-component"
+      position="top"
+      :modal="true"
+      :header="opt.header"
+      v-model:visible="opt.show"
+  >
     <slot></slot>
 
     <template #footer>

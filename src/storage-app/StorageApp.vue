@@ -116,7 +116,7 @@ export default {
     docCreate() {
       this.state.docEditor.open();
       const parent = this.nav.dirs.slice(-1).pop();
-      this.input.doc = new StorageDoc.empty({parent_id: parent.id});
+      this.input.doc = new StorageDoc.empty({parent_id: parent ? parent.id : null});
     },
 
     /** @param {ProgressEvent} e */

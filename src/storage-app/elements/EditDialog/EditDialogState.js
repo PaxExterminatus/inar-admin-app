@@ -25,6 +25,10 @@ class EditDialogState {
         return this.options.show;
     }
 
+    set show(value) {
+        this.options.show = value;
+    }
+
     get loading() {
         return this.options.wait;
     }
