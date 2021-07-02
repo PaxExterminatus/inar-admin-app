@@ -6,10 +6,8 @@
 
     <div class="actions">
       <Button title="Create" icon="pi pi-plus-circle" @click="createNewDir"/>
-      <template v-if="input.dir.id">
-        <Button title="Edit" icon="pi pi-pencil" @click="state.dirEditor.open()"/>
-        <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()"/>
-      </template>
+      <Button title="Edit" icon="pi pi-pencil" @click="dirEdit" :disabled="!input.dir.id"/>
+      <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()" :disabled="!input.dir.id"/>
       <Divider layout="vertical"/>
       <Button title="Create document" icon="pi pi-cloud-upload" @click="docCreate"/>
     </div>
@@ -75,6 +73,10 @@ export default {
         docs: [],
       },
 
+      selected: {
+        dir: null,
+      },
+
       state: {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
@@ -103,6 +105,12 @@ export default {
   },
 
   methods: {
+    dirEdit() {
+      this.errors.doc = {};
+      this.state.dirEditor.open()
+      this.input.dir = this.input.dir.copy();
+    },
+
     docRemove(doc) {
       this.input.doc = doc;
       this.state.docRemove.open();
@@ -210,7 +218,7 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirOpen(dir) {
-      this.input.dir = dir;
+      this.input.dir = StorageDir.empty();
       this.getStorageDir(dir);
       this.nav.dirs.forEach(iDir => {
         iDir.unSelect();
@@ -220,13 +228,14 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirOpenNav(dir) {
-      this.input.dir = dir;
+      this.selected.dir = null;
       this.getStorageDir(dir);
       const position = this.nav.dirs.findIndex(iDir => iDir.id === dir.id);
       this.nav.dirs = this.nav.dirs.filter((dir, index) => index <= position)
     },
 
     rootSelect() {
+      this.selected.dir = null;
       this.root.wait();
       this.root.select();
       this.nav.dirs = [];

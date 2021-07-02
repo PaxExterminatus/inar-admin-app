@@ -45,6 +45,18 @@ class StorageDir extends StorageItem {
     })
   }
 
+  copy() {
+    return new StorageDir({
+      id: this.id,
+      parent_id: this.parent_id,
+      type: 'dir',
+      name: this.name,
+      size: this.size,
+      state: this.state,
+      props: this.props,
+    });
+  }
+
   select() {
     this.state.selected = true;
   }
