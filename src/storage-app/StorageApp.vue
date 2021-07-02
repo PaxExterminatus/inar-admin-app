@@ -79,7 +79,7 @@ export default {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
         dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
-        docRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
+        docRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove model').yes({label: 'Yes'})),
       },
 
       input: {
