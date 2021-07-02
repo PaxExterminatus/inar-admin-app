@@ -16,7 +16,7 @@
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <Docs :docs="kept.docs" @edit="docEdit"/>
+    <Docs :docs="kept.docs" @edit="docEdit" @remove="docRemove"/>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
       <DirForm :inp="input.dir" :errors="errors.dir"/>
@@ -28,6 +28,14 @@
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
       <p>Do you want to delete this folder? <strong>{{ input.dir.name }}</strong></p>
+    </EditDialog>
+
+    <EditDialog :state="state.docRemove" @save="dirRemove">
+      <p class="flex-center-align actions">
+        <img :src="input.doc.props.cover" class="product-image"/>
+        <span>Do you want to delete this model?</span>
+        <strong>{{ input.doc.name }}</strong>
+      </p>
     </EditDialog>
 
     <Toast/>
@@ -71,6 +79,7 @@ export default {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
         dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
+        docRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
       },
 
       input: {
@@ -94,6 +103,10 @@ export default {
   },
 
   methods: {
+    docRemove(doc) {
+      this.input.doc = doc;
+      this.state.docRemove.open();
+    },
     /** @param {StorageDoc} doc */
     docEdit(doc) {
       this.input.doc = doc.copy();

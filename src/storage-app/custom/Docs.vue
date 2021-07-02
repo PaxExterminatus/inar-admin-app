@@ -18,7 +18,10 @@
 
     <Column header="Actions">
       <template #body="slotProps">
-        <Button title="Edit" icon="pi pi-pencil" @click="edit(slotProps.data)"/>
+        <div class="actions">
+          <Button title="Edit" icon="pi pi-pencil" @click="edit(slotProps.data)"/>
+          <Button title="Delete" icon="pi pi-trash" @click="remove(slotProps.data)"/>
+        </div>
       </template>
     </Column>
   </DataTable>
@@ -46,6 +49,9 @@ export default {
   methods: {
     edit(doc) {
       this.$emit('edit', doc);
+    },
+    remove(doc) {
+      this.$emit('remove', doc);
     },
   },
 }
