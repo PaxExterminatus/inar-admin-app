@@ -109,11 +109,13 @@ export default {
     },
     /** @param {StorageDoc} doc */
     docEdit(doc) {
+      this.errors.doc = {};
       this.input.doc = doc.copy();
       this.state.docEditor.open();
     },
 
     docCreate() {
+      this.errors.doc = {};
       this.state.docEditor.open();
       const parent = this.nav.dirs.slice(-1).pop();
       this.input.doc = new StorageDoc.empty({parent_id: parent ? parent.id : null});
@@ -138,6 +140,8 @@ export default {
                     this.acceptStorageData(r.data);
                   })
                   .catch(e => {
+                    this.errors.doc = e.response.data.errors;
+                    console.log(this.errors.doc);
                     this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
                   })
                   .finally(() => {

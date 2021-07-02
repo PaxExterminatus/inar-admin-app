@@ -84,7 +84,6 @@ class StorageClient {
    * @return Promise<StorageGetResponse>
    */
   upload(doc, onUploadProgress) {
-    console.log('upload doc', doc)
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -97,8 +96,7 @@ class StorageClient {
 
     if (doc.id) form.append('id', doc.id);
     if (doc.file) form.append('file', doc.file);
-    if (doc.name) form.append('name', doc.name);
-    if (doc.parent_id) form.append('parent_id', doc.parent_id);
+    if (doc.preview) form.append('preview', doc.preview);
 
     return axios.post('/storage', form, config);
   }

@@ -25,13 +25,27 @@ class StorageDoc extends StorageItem {
    * @param {('local'|'kept'|'loading')} state
    * @param {DocProps} props
    * @param {?File} file
+   * @param {?File} preview
    */
-  constructor({id, parent_id, name, size, state, props, file = null}) {
+  constructor({id, parent_id, name, size, state, props, file = null, preview = null}) {
     super({id, parent_id, name, type: 'doc', props});
     this.size = size;
     this.state = state;
     this.file = file;
+    this.preview = preview;
     this.polygons = 0;
+  }
+
+  /**
+   * @param {File} file
+   */
+  previewAttach(file) {
+    this.preview = file;
+    return this;
+  }
+  previewDetach() {
+    this.preview = null;
+    return this;
   }
 
   /**

@@ -2,13 +2,15 @@
   <div class="form-component doc-form">
     <TabView>
       <TabPanel header="Model">
-        <div class="actions">
-          <input type="file" ref="storageFileInput" hidden @change="storageFileInputChange">
-          <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
-          <template v-if="input.file">
-            <span class="file-name">{{ input.file.name }}</span>
-          </template>
-        </div>
+        <ErrorLine class="input-line" :errors="errors['file']">
+          <div class="actions">
+            <input type="file" ref="storageFileInput" hidden @change="storageFileInputChange">
+            <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
+            <template v-if="input.file">
+              <span class="file-name">{{ input.file.name }}</span>
+            </template>
+          </div>
+        </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['name']">
           <label for="name">Name</label>
@@ -27,14 +29,25 @@
       </TabPanel>
 
       <TabPanel header="Cover">
-        <div class="actions">
-          <input type="file" ref="storagePreviewInput" hidden @change="storagePreviewInputChange">
-          <Button title="Select file" icon="pi pi-folder-open" @click="storagePreviewInputOpen"/>
-        </div>
 
-        <ErrorLine class="input-line" :errors="errors['props.preview']">
-          <label for="preview">Preview</label>
-          <InputText id="preview" v-model="input.props.preview"/>
+        <ErrorLine class="input-line" :errors="errors['props.preview'] || errors['preview']">
+          <label for="url">Preview</label>
+          <div class="input-image">
+            <div class="product-preview" >
+              <img class="image-box" v-if="preview || input.props.preview" :src="preview || input.props.cover" alt="Model Cover">
+              <div class="image-box" v-else>
+                <i class="pi pi-image"/>
+              </div>
+            </div>
+
+            <div class="actions">
+              <input type="file" ref="storagePreviewInput" hidden @change="storagePreviewInputChange">
+              <Button title="Select file" icon="pi pi-folder-open" @click="storagePreviewInputOpen"/>
+              <template v-if="preview">
+                <Button class="to-right" title="Select file" icon="pi pi-times" @click="cancel"/>
+              </template>
+            </div>
+          </div>
         </ErrorLine>
 
         <Divider :align="'center'">
@@ -42,6 +55,20 @@
         </Divider>
 
         <ErrorLine class="input-line" :errors="errors['props.url']">
+          <div class="input-image">
+            <div class="product-preview" >
+              <img class="image-box" v-if="input.props.url" :src="input.props.url" alt="Model Cover">
+              <div class="image-box" v-else>
+                <i class="pi pi-image"/>
+              </div>
+            </div>
+            <div class="actions">
+              <template v-if="input.props.url">
+                <Button class="to-right" title="Select file" icon="pi pi-times" @click="clearUrl"/>
+              </template>
+            </div>
+          </div>
+
           <label for="url">URL</label>
           <InputText id="url" v-model="input.props.url"/>
         </ErrorLine>
@@ -107,6 +134,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      preview: null,
+    };
+  },
+
   computed: {
     /** @returns {StorageDoc|Object} */
     input() {
@@ -115,13 +148,23 @@ export default {
   },
 
   methods: {
+    cancel() {
+      this.preview = null;
+      this.input.previewDetach();
+    },
+
+    clearUrl() {
+      this.input.props.url = null;
+    },
+
     storagePreviewInputOpen() {
       this.$refs.storagePreviewInput.click();
     },
 
     storagePreviewInputChange() {
       const file = this.$refs.storagePreviewInput.files[0];
-      this.input.props.preview = file.name;
+      this.preview = URL.createObjectURL(file);
+      this.input.previewAttach(file);
     },
 
     storageFileInputOpen() {
