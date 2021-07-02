@@ -13,16 +13,35 @@
       <i class="folder-icon pi pi-folder"/>
     </template>
 
-    <span class="folder-name">
-      {{ folder.name }}
+    <span>
+      <div class="folder-name">{{ folder.name }}</div>
+      <div class="tags">
+        <template v-if="folder.props.max_polygons">
+          <div class="tag" v-tooltip.top="'Maximum number of polygons for nested models: ' + folder.props.max_polygons">
+            <i class="pi pi-clone"/>
+          </div>
+        </template>
+
+        <template v-if="folder.props.max_size">
+          <div class="tag" v-tooltip.top="'Recommended file size: ' + sizeFormat(folder.props.max_size)">
+            <i class="pi pi-file"/>
+          </div>
+        </template>
+      </div>
     </span>
   </div>
 </template>
 
 <script>
 import { StorageDir } from '../entity'
+import Tag from 'primevue/tag';
+import FileSize from '../services/FileSize'
 
 export default {
+  components: {
+    Tag,
+  },
+
   props: {
     dir: {
       type: Object,
@@ -50,12 +69,16 @@ export default {
     open() {
       this.$emit('open', this.folder);
     },
+    sizeFormat(sizeInBytes) {
+      return FileSize.inBytes(sizeInBytes).format();
+    },
   },
 }
 </script>
 
 <style lang="sass">
 .folder-cmp
+  position: relative
   display: flex
   overflow: hidden
   color: rgba(0,0,0,.72)
@@ -80,4 +103,21 @@ export default {
     align-items: center
     text-overflow: ellipsis
     font-weight: 600
+  .tags
+    position: absolute
+    display: flex
+    flex-direction: column
+    right: 0
+    top: 0
+    height: 100%
+    .tag
+      display: flex
+      align-items: center
+      justify-content: center
+      flex: 1
+      text-align: center
+    .pi
+      font-weight: normal
+      font-size: 10px
+      flex: 1
 </style>

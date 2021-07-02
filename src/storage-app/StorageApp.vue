@@ -5,16 +5,18 @@
     </Dirs>
 
     <div class="actions">
-      <Button title="Create" icon="pi pi-plus-circle" @click="createNewDir"/>
-      <Button title="Edit" icon="pi pi-pencil" @click="dirEdit" :disabled="!input.dir.id"/>
-      <Button title="Delete" icon="pi pi-trash" @click="state.dirRemove.open()" :disabled="!input.dir.id"/>
+      <Button v-tooltip="'Create folder'" icon="pi pi-plus-circle" @click="createNewDir"/>
+      <Button v-tooltip.top="'Edit folder'" icon="pi pi-pencil" @click="dirEdit" :disabled="!input.dir.id"/>
+      <Button v-tooltip.top="'Delete folder'" icon="pi pi-trash" @click="dirRemoveDialog" :disabled="!input.dir.id"/>
       <Divider layout="vertical"/>
-      <Button title="Create document" icon="pi pi-cloud-upload" @click="docCreate"/>
+      <Button v-tooltip.top="'Create model'" icon="pi pi-cloud-upload" @click="docCreate" :disabled="!can.makeFile"/>
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <Docs :docs="kept.docs" @edit="docEdit" @remove="docRemove"/>
+    <template v-if="can.makeFile">
+      <Docs :docs="kept.docs" @edit="docEdit" @remove="docRemove"/>
+    </template>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
       <DirForm :inp="input.dir" :errors="errors.dir"/>
@@ -25,7 +27,10 @@
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
-      <p>Do you want to delete this folder? <strong>{{ input.dir.name }}</strong></p>
+      <p class="flex-center-align actions">
+        <span>Do you want to delete this folder?</span>
+        <strong>{{ input.dir.name }}</strong>
+      </p>
     </EditDialog>
 
     <EditDialog :state="state.docRemove" @save="dirRemove">
@@ -73,10 +78,6 @@ export default {
         docs: [],
       },
 
-      selected: {
-        dir: null,
-      },
-
       state: {
         dirEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Folder editor')),
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
@@ -104,6 +105,17 @@ export default {
     this.rootSelect();
   },
 
+  computed: {
+    can() {
+      return {
+        makeFile: this.dirCurrent && this.dirCurrent.id,
+      };
+    },
+    dirCurrent() {
+      return this.nav.dirs.slice(-1).pop();
+    },
+  },
+
   methods: {
     dirEdit() {
       this.errors.doc = {};
@@ -125,7 +137,7 @@ export default {
     docCreate() {
       this.errors.doc = {};
       this.state.docEditor.open();
-      const parent = this.nav.dirs.slice(-1).pop();
+      const parent = this.dirCurrent;
       this.input.doc = new StorageDoc.empty({parent_id: parent ? parent.id : null});
     },
 
@@ -149,7 +161,6 @@ export default {
                   })
                   .catch(e => {
                     this.errors.doc = e.response.data.errors;
-                    console.log(this.errors.doc);
                     this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
                   })
                   .finally(() => {
@@ -167,6 +178,10 @@ export default {
             this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
             this.state.docEditor.stop();
           });
+    },
+
+    dirRemoveDialog() {
+      this.state.dirRemove.open();
     },
 
     dirRemove() {
@@ -228,14 +243,13 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirOpenNav(dir) {
-      this.selected.dir = null;
+      this.input.dir = StorageDir.empty();
       this.getStorageDir(dir);
       const position = this.nav.dirs.findIndex(iDir => iDir.id === dir.id);
       this.nav.dirs = this.nav.dirs.filter((dir, index) => index <= position)
     },
 
     rootSelect() {
-      this.selected.dir = null;
       this.root.wait();
       this.root.select();
       this.nav.dirs = [];

@@ -14,7 +14,11 @@
       </template>
     </Column>
 
-    <Column field="size" header="Size"></Column>
+    <Column field="size" header="Size">
+      <template #body="slotProps">
+        {{ sizeFormat(slotProps.data.props.size)  }}
+      </template>
+    </Column>
 
     <Column header="Actions">
       <template #body="slotProps">
@@ -31,6 +35,7 @@
 import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import Button from 'primevue/button'
+import FileSize from '../services/FileSize'
 
 export default {
   components: {
@@ -52,6 +57,9 @@ export default {
     },
     remove(doc) {
       this.$emit('remove', doc);
+    },
+    sizeFormat(bytes) {
+      return FileSize.inBytes(bytes).format();
     },
   },
 }
