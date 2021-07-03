@@ -13,22 +13,20 @@
       <i class="folder-icon pi pi-folder"/>
     </template>
 
-    <span>
-      <div class="folder-name">{{ folder.name }}</div>
-      <div class="tags">
-        <template v-if="folder.props.max_polygons">
-          <div class="tag" v-tooltip.top="'Maximum number of polygons for nested models: ' + folder.props.max_polygons">
-            <i class="pi pi-clone"/>
-          </div>
-        </template>
+    <div class="folder-name">{{ folder.name }}</div>
+    <div class="tags">
+      <template v-if="folder.props.max_polygons">
+        <div class="tag" v-tooltip.top="'Maximum number of polygons for nested models: ' + folder.props.max_polygons">
+          <i class="pi pi-clone"/>
+        </div>
+      </template>
 
-        <template v-if="folder.props.max_size">
-          <div class="tag" v-tooltip.top="'Recommended file size: ' + sizeFormat(folder.props.max_size)">
-            <i class="pi pi-file"/>
-          </div>
-        </template>
-      </div>
-    </span>
+      <template v-if="folder.props.max_size">
+        <div class="tag" v-tooltip.top="'Recommended file size: ' + sizeFormat(folder.props.max_size)">
+          <i class="pi pi-file"/>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 

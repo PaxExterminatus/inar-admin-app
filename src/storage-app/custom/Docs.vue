@@ -1,6 +1,6 @@
 <template>
   <DataTable class="storage-files p-datatable-sm" :value="docs">
-    <Column headerClass="column-small" bodyClass="column-small">
+    <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
         <i class="pi pi-cloud"/>
       </template>
@@ -8,7 +8,7 @@
 
     <Column field="name" header="Name"></Column>
 
-    <Column field="preview" header="Preview">
+    <Column field="preview" header="Preview" headerClass="column-preview" bodyClass="column-preview-body">
       <template #body="slotProps">
         <img :src="slotProps.data.props.cover" class="product-image"/>
       </template>
@@ -64,3 +64,18 @@ export default {
   },
 }
 </script>
+
+<style lang="sass">
+.storage-files
+  .column-state
+    width: 70px
+    text-align: center !important
+  .column-preview
+    width: 200px
+    .p-column-title
+      width: 100%
+      text-align: center
+  .column-preview-body
+    display: flex
+    justify-content: center
+</style>
