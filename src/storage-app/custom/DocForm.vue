@@ -20,14 +20,26 @@
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <label for="size">Size</label>
-          <InputNumber id="size" v-model="input.props.size" showButtons/>
-          <div>Maximum file size for this folder <strong>{{ dir.maxPolygons }}</strong></div>
+
+          <InputFileSize id="size" :size="input.props.size"/>
+
+          <template #tags>
+            <template v-if="input.props.size > dir.maxSize">
+              <Tag v-tooltip.top="'File larger than budget for this type of asset'" icon="pi pi-exclamation-triangle" severity="warning" :value="fileSize(dir.maxSize).format()"/>
+            </template>
+          </template>
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.polygons']">
           <label for="polygons">Polygons</label>
           <InputNumber id="polygons" v-model="input.props.polygons" showButtons/>
-          <div>Maximum number of polygons for this folder <strong>{{ fileSize(dir.maxSize) }}</strong></div>
+
+          <template #tags>
+            <template v-if="input.props.polygons > dir.maxPolygons">
+              <Tag v-tooltip.top="'Too many polygons for this type of asset'" icon="pi pi-exclamation-triangle" severity="warning" :value="dir.maxPolygons"/>
+            </template>
+          </template>
+
         </ErrorLine>
       </TabPanel>
 
@@ -104,15 +116,17 @@
 </template>
 
 <script>
+import Tag from 'primevue/tag';
 import Divider from 'primevue/divider'
 import Textarea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
-import { ErrorLine } from '../elements'
+import { ErrorLine, InputFileSize } from '../elements'
 import Button from 'primevue/button'
 import InputNumber from 'primevue/inputnumber'
 import FileSize from '../services/FileSize'
+
 
 export default {
   components: {
@@ -124,6 +138,8 @@ export default {
     Divider,
     Button,
     InputNumber,
+    Tag,
+    InputFileSize,
   },
 
   props: {
@@ -158,11 +174,14 @@ export default {
     dir() {
       return this.currentDir;
     },
+    size() {
+      return FileSize.inBytes(this.input.props.size).size();
+    },
   },
 
   methods: {
     fileSize(bytes) {
-      return FileSize.inBytes(bytes).format();
+      return FileSize.inBytes(bytes);
     },
     cancel() {
       this.preview = null;
