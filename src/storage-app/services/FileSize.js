@@ -14,12 +14,13 @@ class FileSize {
 
         const k = 1024;
         const dm = this.decimals < 0 ? 0 : this.decimals;
-        const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
         const i = Math.floor(Math.log(this.bytes) / Math.log(k));
 
         return parseFloat((this.bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
+
 
     percent(bytes) {
         return Math.round((bytes / this.bytes) * 100);

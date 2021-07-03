@@ -30,6 +30,14 @@ class StorageDir extends StorageItem {
     this.state = new DirSate({});
   }
 
+  get maxPolygons() {
+    return this.props.max_polygons;
+  }
+
+  get maxSize() {
+    return this.props.max_size;
+  }
+
   makeProps(props) {
     return new DirProps(props);
   }

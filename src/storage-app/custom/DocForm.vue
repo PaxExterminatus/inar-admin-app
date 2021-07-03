@@ -1,6 +1,7 @@
 <template>
   <div class="form-component doc-form">
     <TabView>
+
       <TabPanel header="Model">
         <ErrorLine class="input-line" :errors="errors['file']">
           <div class="actions">
@@ -20,11 +21,13 @@
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <label for="size">Size</label>
           <InputNumber id="size" v-model="input.props.size" showButtons/>
+          <div>Maximum file size for this folder <strong>{{ dir.maxPolygons }}</strong></div>
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.polygons']">
           <label for="polygons">Polygons</label>
           <InputNumber id="polygons" v-model="input.props.polygons" showButtons/>
+          <div>Maximum number of polygons for this folder <strong>{{ fileSize(dir.maxSize) }}</strong></div>
         </ErrorLine>
       </TabPanel>
 
@@ -109,6 +112,7 @@ import TabPanel from 'primevue/tabpanel'
 import { ErrorLine } from '../elements'
 import Button from 'primevue/button'
 import InputNumber from 'primevue/inputnumber'
+import FileSize from '../services/FileSize'
 
 export default {
   components: {
@@ -132,6 +136,11 @@ export default {
       type: Object,
       default: () => ({}),
     },
+
+    currentDir: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 
   data() {
@@ -145,9 +154,16 @@ export default {
     input() {
       return this.inp;
     },
+    /** @returns {StorageDir|Object} */
+    dir() {
+      return this.currentDir;
+    },
   },
 
   methods: {
+    fileSize(bytes) {
+      return FileSize.inBytes(bytes).format();
+    },
     cancel() {
       this.preview = null;
       this.input.previewDetach();
