@@ -4,12 +4,7 @@
 
       <TabPanel header="Model">
 
-        <InputFile @select="select" :errors="errors['file']"/>
-
-        <ErrorLine class="input-line" :errors="errors['name']">
-          <label for="name">Name</label>
-          <InputText id="name" v-model="input.name"/>
-        </ErrorLine>
+        <InputFile @select="select" :errors="errors" v-model="input.name" :validation=""/>
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <label>Size</label>
@@ -144,6 +139,10 @@ export default {
     errors: {
       type: Object,
       default: () => ({}),
+    },
+
+    validation: {
+      extension: '',
     },
 
     currentDir: {
