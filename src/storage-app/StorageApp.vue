@@ -15,7 +15,7 @@
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
     <template v-if="can.makeFile">
-      <Docs :docs="kept.docs" :dir="dirCurrent" @edit="docEdit" @remove="docRemove"/>
+      <Docs :docs="kept.docs" :dir="dirCurrent" @edit="docEdit" @remove="docRemoveDialog"/>
     </template>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
@@ -27,14 +27,14 @@
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
-      <p class="flex-center-align actions">
+      <p class="flex-center-align actions p-my-2">
         <span>Do you want to delete this folder?</span>
         <strong>{{ input.dir.name }}</strong>
       </p>
     </EditDialog>
 
-    <EditDialog :state="state.docRemove" @save="dirRemove">
-      <p class="flex-center-align actions">
+    <EditDialog :state="state.docRemove" @save="docRemove">
+      <p class="flex-center-align actions p-my-2">
         <img :src="input.doc.props.cover" class="product-image"/>
         <span>Do you want to delete this model?</span>
         <strong>{{ input.doc.name }}</strong>
@@ -123,10 +123,22 @@ export default {
       this.state.dirEditor.open()
       this.input.dir = this.input.dir.copy();
     },
-
-    docRemove(doc) {
+    docRemoveDialog(doc) {
       this.input.doc = doc;
       this.state.docRemove.open();
+    },
+    docRemove() {
+      storageClient.delete(this.input.doc.id)
+          .then(r => {
+            this.acceptStorageData(r.data);
+            this.state.docRemove.close();
+          })
+          .catch(e => {
+            this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
+          })
+          .finally(() => {
+            this.state.docRemove.stop();
+          });
     },
     /** @param {StorageDoc} doc */
     docEdit(doc) {
