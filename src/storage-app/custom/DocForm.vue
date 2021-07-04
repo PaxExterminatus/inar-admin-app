@@ -18,10 +18,10 @@
           <InputText id="name" v-model="input.name"/>
         </ErrorLine>
 
+        input.props.size {{input.props.size}}
         <ErrorLine class="input-line" :errors="errors['props.size']">
-          <label for="size">Size</label>
-
-          <InputFileSize id="size" :size="input.props.size"/>
+          <label>Size</label>
+          <InputFileSize v-model="input.props.size"/>
 
           <template #tags>
             <template v-if="input.props.size > dir.maxSize">

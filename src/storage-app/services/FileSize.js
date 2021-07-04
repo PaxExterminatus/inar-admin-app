@@ -1,19 +1,14 @@
 const unitSystem = {
-    factor: 1024,
-
-    unit: {
-        name: 'byte', short: 'B', plural: 'bytes',
-    },
-
     units: [
-        {prefix: 'kilo',  power: 1, short: 'kB'},
-        {prefix: 'mega',  power: 2, short: 'MB'},
-        {prefix: 'giga',  power: 3, short: 'GB'},
-        {prefix: 'tera',  power: 4, short: 'TB'},
-        {prefix: 'peta',  power: 5, short: 'PB'},
-        {prefix: 'exa',   power: 6, short: 'EB'},
-        {prefix: 'zetta', power: 7, short: 'ZB'},
-        {prefix: 'yotta', power: 8, short: 'YB'},
+        {name: 'byte',      plural: 'bytes',      prefix: '',      short: 'B',  factor: 1,    power: 1,},
+        {name: 'kilobyte',  plural: 'kilobytes',  prefix: 'kilo',  short: 'kB', factor: 1024, power: 1,},
+        {name: 'megabyte',  plural: 'megabytes',  prefix: 'mega',  short: 'MB', factor: 1024, power: 2,},
+        {name: 'gigabyte',  plural: 'gigabytes',  prefix: 'giga',  short: 'GB', factor: 1024, power: 3,},
+        {name: 'terabyte',  plural: 'terabytes',  prefix: 'tera',  short: 'TB', factor: 1024, power: 4,},
+        {name: 'petabyte',  plural: 'petabytes',  prefix: 'peta',  short: 'PB', factor: 1024, power: 5,},
+        {name: 'exabyte',   plural: 'exabytes',   prefix: 'exa',   short: 'EB', factor: 1024, power: 6,},
+        {name: 'zettabyte', plural: 'zettabytes', prefix: 'zetta', short: 'ZB', factor: 1024, power: 7,},
+        {name: 'yottabyte', plural: 'yottabytes', prefix: 'yotta', short: 'YB', factor: 1024, power: 8,},
     ],
 }
 
@@ -61,4 +56,3 @@ export {
     FileSize,
     unitSystem,
 }
-

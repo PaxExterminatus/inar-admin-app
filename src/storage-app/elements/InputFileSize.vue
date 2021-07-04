@@ -1,6 +1,8 @@
 <template>
+  <div>
+    value: {{ modelValue }}
+  </div>
   <div class="p-inputgroup">
-
     <span v-tooltip.top="capitalize(selectedUnitName)" class="p-inputgroup-addon hoverable" v-if="selectedUnit" @click="showSelect">
       {{ selectedUnit.short }}
     </span>
@@ -12,23 +14,23 @@
       </span>
     </div>
 
-    <InputNumber v-show="!state.showSelect" v-model="input" showButtons :min="0" mode="decimal" :minFractionDigits="2"/>
+    <InputNumber v-show="!state.showSelect" v-model="input" showButtons :min="0" mode="decimal" />
   </div>
 </template>
 
 <script>
+import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber'
 import { FileSize, unitSystem } from '../services/FileSize'
-import Dropdown from 'primevue/dropdown';
 
 export default {
   components: {
-    InputNumber,
     Dropdown,
+    InputNumber,
   },
 
   props: {
-    size: {
+    modelValue: {
       type: Number,
       default: 0,
     },
@@ -37,25 +39,28 @@ export default {
   data() {
     return {
       unitSystem: unitSystem,
-      /** @type {{prefix: string, power: number, short: string}} */
-      selectedUnit: unitSystem.units[1],
+      /** @type {{name: string, plural: string, prefix: string, short: string, factor: number, power: number}} */
+      selectedUnit: unitSystem.units[2],
+
       state: {
         showSelect: false,
       },
     };
   },
 
+
   computed: {
     input: {
       get() {
-        return this.size / Math.pow(unitSystem.factor, this.selectedUnit.power);
+        return this.modelValue / Math.pow(this.selectedUnit.factor, this.selectedUnit.power);
       },
-      set() {
-        this.$emit('input');
+      set(val) {
+        const sizeInBytes = val * Math.pow(this.selectedUnit.factor, this.selectedUnit.power);
+        this.$emit("update:modelValue", sizeInBytes);
       },
     },
     selectedUnitName() {
-      return this.selectedUnit.prefix + this.unitSystem.unit.plural;
+      return this.selectedUnit.name;
     },
   },
 
