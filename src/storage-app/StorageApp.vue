@@ -152,6 +152,10 @@ export default {
           .then(r => {
             this.acceptStorageData(r.data);
             this.input.doc.id = r.data.item.id;
+            console.log('r.data', r.data);
+            if (r.data.parent) {
+              this.dirCurrent.props.over = r.data.parent.props.over;
+            }
             if (this.input.doc.file || this.input.doc.preview)
             {
               storageClient.upload(this.input.doc, this.uploadProgress)

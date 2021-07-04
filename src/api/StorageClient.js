@@ -16,6 +16,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000/api/admin';
  *     folders: StorageResponseDataFolder[]
  *     files: StorageResponseDataFile[]
  *     item: StorageResponseDataFile
+ *     parent: StorageResponseDataFolder|null
  *   }
  * }} StorageSaveResponse
  */
@@ -32,6 +33,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000/api/admin';
  *     preview: string|null
  *     max_polygons: number
  *     max_size: number
+ *     over: number
  *   }
  * }} StorageResponseDataFolder
  */
