@@ -15,7 +15,7 @@
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
     <template v-if="can.makeFile">
-      <Docs :docs="kept.docs" @edit="docEdit" @remove="docRemove"/>
+      <Docs :docs="kept.docs" :dir="dirCurrent" @edit="docEdit" @remove="docRemove"/>
     </template>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">

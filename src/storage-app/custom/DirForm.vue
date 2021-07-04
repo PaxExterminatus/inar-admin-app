@@ -6,8 +6,8 @@
     </ErrorLine>
 
     <ErrorLine class="input-line" :errors="errors['props.max_size']">
-      <label for="size">Maximum file size</label>
-      <InputText id="size" type="number" v-model="input.props.max_size"/>
+      <label>Maximum file size</label>
+      <InputFileSize v-model="input.props.max_size"/>
     </ErrorLine>
 
     <ErrorLine class="input-line" :errors="errors['props.max_polygons']">
@@ -19,12 +19,13 @@
 
 <script>
 import InputText from 'primevue/inputtext'
-import { ErrorLine } from '../elements'
+import { ErrorLine, InputFileSize } from '../elements'
 
 export default {
   components: {
     InputText,
     ErrorLine,
+    InputFileSize,
   },
 
   props: {

@@ -13,16 +13,19 @@
       <i class="folder-icon pi pi-folder"/>
     </template>
 
-    <div class="folder-name">{{ folder.name }}</div>
+    <div v-tooltip.top="folder.name" class="folder-name">{{ folder.name }}</div>
+
     <div class="tags">
       <template v-if="folder.props.max_polygons">
-        <div class="tag" v-tooltip.top="'Maximum number of polygons for nested models: ' + folder.props.max_polygons">
+        <div class="tag">
+          <span class="small-text">{{ folder.props.max_polygons }}</span>
           <i class="pi pi-clone"/>
         </div>
       </template>
 
       <template v-if="folder.props.max_size">
-        <div class="tag" v-tooltip.top="'Recommended file size: ' + sizeFormat(folder.props.max_size)">
+        <div class="tag">
+          <span class="small-text">{{ sizeFormat(folder.props.max_size) }}</span>
           <i class="pi pi-file"/>
         </div>
       </template>
@@ -100,10 +103,11 @@ export default {
   .folder-icon
     margin-right: 12px
   .folder-name
-    display: flex
-    align-items: center
+    overflow: hidden
     text-overflow: ellipsis
     font-weight: 600
+    max-width: 120px
+    white-space: nowrap
   .tags
     position: absolute
     display: flex
@@ -111,6 +115,9 @@ export default {
     right: 0
     top: 0
     height: 100%
+  .small-text
+    flex: 1
+    text-align: left
   .tag
     display: flex
     align-items: center
@@ -118,8 +125,7 @@ export default {
     flex: 1
     text-align: center
     opacity: 0
+    font-size: 10px
     .pi
-      font-weight: normal
       font-size: 10px
-      flex: 1
 </style>

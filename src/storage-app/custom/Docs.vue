@@ -1,8 +1,18 @@
 <template>
   <DataTable class="storage-files p-datatable-sm" :value="docs">
+
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
-        <i class="pi pi-cloud"/>
+        <i class="pi pi-cloud"
+           v-tooltip="'File available'"
+           style="color: darkgreen"
+        />
+        <template v-if="slotProps.data.props.size > dir.props.max_size">
+          <i class="pi pi-exclamation-triangle"
+             v-tooltip="'File larger than budget for this type of asset'"
+             style="color: darkorange"
+          />
+        </template>
       </template>
     </Column>
 
@@ -48,6 +58,10 @@ export default {
     docs: {
       type: Array,
       default: () => [],
+    },
+    dir: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
