@@ -1,7 +1,4 @@
 <template>
-  <div>
-    value: {{ modelValue }}
-  </div>
   <div class="p-inputgroup">
     <span v-tooltip.top="capitalize(selectedUnitName)" class="p-inputgroup-addon hoverable" v-if="selectedUnit" @click="showSelect">
       {{ selectedUnit.short }}
@@ -14,7 +11,7 @@
       </span>
     </div>
 
-    <InputNumber v-show="!state.showSelect" v-model="input" showButtons :min="0" mode="decimal" />
+    <InputNumber v-show="!state.showSelect" v-model="input" showButtons :min="0" mode="decimal" :disabled="disabled"/>
   </div>
 </template>
 
@@ -34,6 +31,14 @@ export default {
       type: Number,
       default: 0,
     },
+    sync: {
+      type: Boolean,
+      default: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -48,6 +53,13 @@ export default {
     };
   },
 
+  watch: {
+    modelValue(val) {
+      if (val && this.sync) {
+        this.selectedUnit = unitSystem.units[FileSize.inBytes(val).size().order];
+      }
+    },
+  },
 
   computed: {
     input: {

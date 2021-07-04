@@ -20,7 +20,7 @@
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <label>Size</label>
-          <InputFileSize v-model="input.props.size"/>
+          <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file"/>
 
           <template #tags>
             <template v-if="input.props.size > dir.maxSize">

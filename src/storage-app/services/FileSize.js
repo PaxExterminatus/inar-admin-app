@@ -34,7 +34,7 @@ class FileSize {
         return {
             value: value,
             unit: this.units[orderOfMagnitude],
-            order: orderOfMagnitude + 1,
+            order: orderOfMagnitude,
         };
     }
 
