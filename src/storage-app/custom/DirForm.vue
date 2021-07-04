@@ -12,13 +12,14 @@
 
     <ErrorLine class="input-line" :errors="errors['props.max_polygons']">
       <label for="polygons">Maximum number of polygons</label>
-      <InputText id="polygons" type="number" v-model="input.props.max_polygons"/>
+      <InputNumber id="polygons" v-model="input.props.max_polygons" showButtons/>
     </ErrorLine>
   </div>
 </template>
 
 <script>
 import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
 import { ErrorLine, InputFileSize } from '../elements'
 
 export default {
@@ -26,6 +27,7 @@ export default {
     InputText,
     ErrorLine,
     InputFileSize,
+    InputNumber,
   },
 
   props: {

@@ -1,8 +1,7 @@
 <template>
   <ErrorLine class="input-file input-line" :errors="errors['name'] || errors['file']">
 
-    <label for="name">File | Filename | {{modelValue}}</label>
-
+    <label for="name">File | Filename</label>
     <div class="p-inputgroup">
       <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
       <InputText id="name" v-model="inputFilename"/>
