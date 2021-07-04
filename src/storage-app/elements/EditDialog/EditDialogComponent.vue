@@ -10,7 +10,7 @@
 
     <template #footer>
       <Button class="btn-default btn-primary" @click="cancel()">Cancel</Button>
-      <Button class="btn-default btn-primary" @click="save()"><i :class="saveIcon"/> {{opt.options.yesLabel}}</Button>
+      <Button class="btn-default btn-primary" @click="save()"><i :class="saveIcon"/> {{saveLabel}}</Button>
     </template>
   </Dialog>
 </template>
@@ -31,6 +31,11 @@ export default {
       type: Object,
       default: () => EditDialogState.make(EditDialogOptions.init()),
     },
+
+    progress: {
+      type: Number,
+      default: 0,
+    },
   },
 
   computed: {
@@ -40,6 +45,12 @@ export default {
     },
     saveIcon() {
       return this.opt.loading ? 'pi pi-spinner pi-spin' : 'pi pi-check';
+    },
+    saveLabel() {
+      if (this.progress) {
+        return `${this.progress}%`;
+      }
+      return this.opt.options.yesLabel;
     },
   },
 

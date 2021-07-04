@@ -22,8 +22,8 @@
       <DirForm :inp="input.dir" :errors="errors.dir"/>
     </EditDialog>
 
-    <EditDialog :state="state.docEditor" @save="docSave">
-      <DocForm :inp="input.doc" :errors="errors.doc" :current-dir="dirCurrent"/>
+    <EditDialog :state="state.docEditor" :progress="state.progress" @save="docSave">
+      <DocForm :inp="input.doc" :errors="errors.doc" :current-dir="dirCurrent" :progress="state.progress"/>
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
@@ -83,6 +83,7 @@ export default {
         docEditor: EditDialogState.make(EditDialogOptions.init().headerSet('Document editor')),
         dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
         docRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove model').yes({label: 'Yes'})),
+        progress: 0,
       },
 
       input: {
@@ -165,6 +166,7 @@ export default {
                   })
                   .finally(() => {
                     this.state.docEditor.stop();
+                    this.state.progress = 0;
                   });
             } else {
               this.input.doc = StorageDoc.empty();

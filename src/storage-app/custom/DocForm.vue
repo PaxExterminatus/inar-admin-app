@@ -156,6 +156,11 @@ export default {
       type: Object,
       default: () => ({}),
     },
+
+    progress: {
+      type: Number,
+      default: 0,
+    },
   },
 
   data() {
