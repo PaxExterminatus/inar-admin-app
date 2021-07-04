@@ -3,15 +3,8 @@
     <TabView>
 
       <TabPanel header="Model">
-        <ErrorLine class="input-line" :errors="errors['file']">
-          <div class="actions">
-            <input type="file" ref="storageFileInput" hidden @change="storageFileInputChange">
-            <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
-            <template v-if="input.file">
-              <span class="file-name">{{ input.file.name }}</span>
-            </template>
-          </div>
-        </ErrorLine>
+
+        <InputFile @select="select" :errors="errors['file']"/>
 
         <ErrorLine class="input-line" :errors="errors['name']">
           <label for="name">Name</label>
@@ -121,7 +114,7 @@ import Textarea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
-import { ErrorLine, InputFileSize } from '../elements'
+import { ErrorLine, InputFileSize, InputFile } from '../elements'
 import Button from 'primevue/button'
 import InputNumber from 'primevue/inputnumber'
 import FileSize from '../services/FileSize'
@@ -139,6 +132,7 @@ export default {
     InputNumber,
     Tag,
     InputFileSize,
+    InputFile,
   },
 
   props: {
@@ -206,12 +200,10 @@ export default {
       this.input.previewAttach(file);
     },
 
-    storageFileInputOpen() {
-      this.$refs.storageFileInput.click();
-    },
-
-    storageFileInputChange() {
-      const file = this.$refs.storageFileInput.files[0];
+    /**
+     * @param {File} file
+     */
+    select(file) {
       this.input.file = file;
       this.input.name = file.name;
       this.input.props.size = file.size;
