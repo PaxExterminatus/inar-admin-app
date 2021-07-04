@@ -1,6 +1,14 @@
 <template>
   <div class="folder-cmp" :class="classes" @click="select" @dblclick="open">
 
+    <template v-if="folder.props.over">
+      <div class="badges">
+        <div class="badge" v-tooltip="'File larger than budget for this type of asset'">
+          {{ folder.props.over }}
+        </div>
+      </div>
+    </template>
+
     <template v-if="folder.state.loading">
       <i class="folder-icon pi pi-spin pi-spinner"/>
     </template>
@@ -37,10 +45,12 @@
 import { StorageDir } from '../entity'
 import Tag from 'primevue/tag';
 import FileSize from '../services/FileSize'
+import Badge from 'primevue/badge';
 
 export default {
   components: {
     Tag,
+    Badge,
   },
 
   props: {
@@ -128,4 +138,17 @@ export default {
     font-size: 10px
     .pi
       font-size: 10px
+  .badges
+    position: absolute
+    display: flex
+    top: 0
+    left: 0
+    .badge
+      min-width: 15px
+      padding: 1px
+      text-align: center
+      border-bottom-right-radius: 5px
+      background-color: #fbc02d
+      color: black
+      font-size: 9px
 </style>

@@ -1,10 +1,11 @@
 import StorageItem from './StorageItem';
 
 class DirProps {
-  constructor({preview = null, max_polygons = null, max_size = null} = {preview: null, max_polygons: null, max_size: null}) {
+  constructor({preview = null, max_polygons = null, max_size = null, over = null} = {preview: null, max_polygons: null, max_size: null}) {
     this.preview = preview;
     this.max_size = max_size;
     this.max_polygons = max_polygons;
+    this.over = over;
   }
 }
 
