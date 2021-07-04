@@ -7,6 +7,7 @@ class EditDialogOptions {
         this.wait = false;
         this.yesLabel = 'Save';
         this.noLabel = 'Cancel';
+        this.disabled = false;
     }
 
     yes({label}) {

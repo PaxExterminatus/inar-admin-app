@@ -9,8 +9,8 @@
     <slot></slot>
 
     <template #footer>
-      <Button class="btn-default btn-primary" @click="cancel()">Cancel</Button>
-      <Button class="btn-default btn-primary" @click="save()"><i :class="saveIcon"/> {{saveLabel}}</Button>
+      <Button class="btn-default btn-primary" @click="cancel()" :disabled="opt.loading">Cancel</Button>
+      <Button class="btn-default btn-primary" @click="save()" :disabled="opt.loading || opt.options.disabled"><i :class="saveIcon"/> {{saveLabel}}</Button>
     </template>
   </Dialog>
 </template>

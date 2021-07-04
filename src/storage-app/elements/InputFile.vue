@@ -1,20 +1,17 @@
 <template>
   <ErrorLine class="input-file input-line" :errors="errors['name'] || errors['file']">
 
-    <label for="name">Name</label>
+    <label for="name">File | Filename | {{modelValue}}</label>
 
     <div class="p-inputgroup">
       <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
-      <InputText id="name" v-model="input.name"/>
-      <template v-if="extension">
-        <span class="p-inputgroup-addon">.{{extension}}</span>
-      </template>
+      <InputText id="name" v-model="inputFilename"/>
+      <span class="p-inputgroup-addon">.{{extension}}</span>
     </div>
-    <div class="actions">
-      <template v-if="extensionError">
-        <Tag v-tooltip.top="'Invalid file extension, expected .obj or .fbx'" icon="pi pi-exclamation-triangle" severity="danger" :value="`.${extension}`"></Tag>
-      </template>
-    </div>
+
+    <template #tags v-if="extensionError">
+      <Tag v-tooltip.top="'Invalid file extension, expected .obj or .fbx'" icon="pi pi-exclamation-triangle" severity="danger" :value="`.${extension}`"></Tag>
+    </template>
 
     <input type="file" ref="storageFileInput" hidden @change="storageFileInputChange">
   </ErrorLine>
@@ -49,11 +46,9 @@ export default {
     return {
       filename: '',
       extension: '',
-      input: {
-        name: this.modelValue,
-      },
     };
   },
+
 
   mounted() {
     this.splitFilename(this.modelValue);
@@ -61,24 +56,36 @@ export default {
 
   computed: {
     extensionError() {
-      if (!this.extension) return false;
-      return !['obj', 'fbx'].includes(this.extension);
+      if (!this.modelValue) return false;
+      const hasError = !['obj', 'fbx'].includes(this.extension);
+      this.$emit('validate', hasError);
+      return hasError;
+    },
+
+    inputFilename: {
+      get() {
+        return this.modelValue;
+      },
+      set(filename) {
+        this.splitFilename(filename);
+        this.$emit('update:modelValue', filename);
+      },
     },
   },
 
   watch: {
     modelValue(filename) {
+      console.log('watch.modelValue');
       this.splitFilename(filename);
     }
   },
 
   methods: {
     splitFilename(filename) {
-      console.log('splitFilename', filename);
       const name = filename.split('.').slice(0, -1).join('.');
-      this.input.name = name;
+      this.name = name;
       this.filename = name;
-      this.extension = filename.split('.').pop();
+      this.extension = filename.split('.').length > 1 ? filename.split('.').pop() : filename.split('.')[1] || '';
     },
 
     storageFileInputOpen() {

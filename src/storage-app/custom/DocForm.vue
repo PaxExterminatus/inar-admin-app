@@ -4,7 +4,7 @@
 
       <TabPanel header="Model">
 
-        <InputFile @select="select" :errors="errors" v-model="input.name" :validation="''"/>
+        <InputFile @select="select" :errors="errors" v-model="input.name" @validate="$emit('validate', $event)"/>
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <label>Size</label>

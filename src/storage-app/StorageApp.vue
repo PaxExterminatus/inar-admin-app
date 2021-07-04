@@ -23,7 +23,7 @@
     </EditDialog>
 
     <EditDialog :state="state.docEditor" :progress="state.progress" @save="docSave">
-      <DocForm :inp="input.doc" :errors="errors.doc" :current-dir="dirCurrent" :progress="state.progress"/>
+      <DocForm :inp="input.doc" :errors="errors.doc" :current-dir="dirCurrent" :progress="state.progress" @validate="state.docEditor.options.disabled = $event"/>
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">

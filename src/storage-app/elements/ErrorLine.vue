@@ -3,7 +3,7 @@
     <slot></slot>
     <div class="error-message actions">
       <slot name="tags"></slot>
-      <span v-if="hasErrors">{{ firstError }}</span>
+      <span>{{ firstError }}</span>
     </div>
   </div>
 </template>
@@ -48,5 +48,5 @@ export default {
     align-items: center
     color: #f44336
     font-size: 1rem
-    min-height: 1.4rem
+    min-height: 36px
 </style>

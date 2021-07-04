@@ -1,11 +1,3 @@
-const errors = {
-    "errors": {
-        "props.max_size": [
-            "Set the maximum file size"
-        ]
-    }
-}
-
 class EditDialogState {
 
     /** @param {EditDialogOptions|Object} options */
@@ -49,6 +41,14 @@ class EditDialogState {
     }
     stop() {
         this.options.wait = false;
+    }
+
+    disable() {
+        this.options.disabled = true;
+    }
+
+    enable() {
+        this.options.disabled = false;
     }
 }
 
