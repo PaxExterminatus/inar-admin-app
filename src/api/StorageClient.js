@@ -98,6 +98,7 @@ class StorageClient {
     if (doc.id) form.append('id', doc.id);
     if (doc.file) form.append('file', doc.file);
     if (doc.preview) form.append('preview', doc.preview);
+    if (doc.name) form.append('filename', doc.name);
 
     return axios.post('/storage', form, config);
   }
