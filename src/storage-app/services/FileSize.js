@@ -7,8 +7,8 @@ const unitSystem = {
         {name: 'terabyte',  plural: 'terabytes',  prefix: 'tera',  short: 'TB', factor: 1024, power: 4,},
         {name: 'petabyte',  plural: 'petabytes',  prefix: 'peta',  short: 'PB', factor: 1024, power: 5,},
         {name: 'exabyte',   plural: 'exabytes',   prefix: 'exa',   short: 'EB', factor: 1024, power: 6,},
-        {name: 'zettabyte', plural: 'zettabytes', prefix: 'zetta', short: 'ZB', factor: 1024, power: 7,},
-        {name: 'yottabyte', plural: 'yottabytes', prefix: 'yotta', short: 'YB', factor: 1024, power: 8,},
+        //{name: 'zettabyte', plural: 'zettabytes', prefix: 'zetta', short: 'ZB', factor: 1024, power: 7,},
+        //{name: 'yottabyte', plural: 'yottabytes', prefix: 'yotta', short: 'YB', factor: 1024, power: 8,},
     ],
 }
 

@@ -26,7 +26,11 @@
               <Tag v-tooltip.top="'Too many polygons for this type of asset'" icon="pi pi-exclamation-triangle" severity="warning" :value="dir.maxPolygons"/>
             </template>
           </template>
+        </ErrorLine>
 
+        <ErrorLine class="input-line" :errors="errors['props.type']">
+          <label for="polygons">Type</label>
+          <Dropdown v-model="input.props.type" :options="typeOptions" optionLabel="name" optionValue="code"/>
         </ErrorLine>
       </TabPanel>
 
@@ -103,15 +107,16 @@
 </template>
 
 <script>
-import Tag from 'primevue/tag';
+import Tag from 'primevue/tag'
+import Button from 'primevue/button'
 import Divider from 'primevue/divider'
+import TabView from 'primevue/tabview'
+import Dropdown from 'primevue/dropdown'
+import TabPanel from 'primevue/tabpanel'
 import Textarea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
-import TabView from 'primevue/tabview'
-import TabPanel from 'primevue/tabpanel'
-import { ErrorLine, InputFileSize, InputFile } from '../elements'
-import Button from 'primevue/button'
 import InputNumber from 'primevue/inputnumber'
+import { ErrorLine, InputFileSize, InputFile } from '../elements'
 import FileSize from '../services/FileSize'
 
 
@@ -128,6 +133,7 @@ export default {
     Tag,
     InputFileSize,
     InputFile,
+    Dropdown,
   },
 
   props: {
@@ -159,6 +165,12 @@ export default {
   data() {
     return {
       preview: null,
+
+      typeOptions: [
+        {code: 'posed', name: 'Posed'},
+        {code: 'rigged', name: 'Rigged'},
+        {code: 'animated', name: 'Animated'},
+      ],
     };
   },
 

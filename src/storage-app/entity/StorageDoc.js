@@ -3,7 +3,7 @@ import StorageItem from './StorageItem';
 class DocProps {
   constructor({preview = null, url = null, polygons = null, size = null,
                 description = null, note = null,
-                topic = null, thesis = null, cover = null} = {}) {
+                topic = null, thesis = null, cover = null, type = null} = {}) {
     this.preview = preview;
     this.url = url;
     this.polygons = polygons;
@@ -13,6 +13,7 @@ class DocProps {
     this.topic = topic;
     this.thesis = thesis;
     this.cover = cover;
+    this.type = type;
   }
 }
 
