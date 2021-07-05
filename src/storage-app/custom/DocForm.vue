@@ -7,8 +7,9 @@
         <InputFile @select="select" :errors="errors" v-model="input.name" @validate="$emit('validate', $event)"/>
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
-          <label>Size</label>
-          <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file"/>
+          <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file">
+            | Recommended {{ fileSize(dir.maxSize).format() }}
+          </InputFileSize>
 
           <template #tags>
             <template v-if="input.props.size > dir.maxSize">

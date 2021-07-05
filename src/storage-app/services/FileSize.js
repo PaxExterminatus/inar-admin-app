@@ -28,6 +28,12 @@ class FileSize {
      * @return {{value: number, unit: string, order: number}}
      */
     size() {
+        if (!this.bytes) return {
+            value: 0,
+            unit: '',
+            order: 0,
+        };
+
         const orderOfMagnitude = Math.floor(Math.log(this.bytes) / Math.log(this.k));
         const value = parseFloat((this.bytes / Math.pow(this.k, orderOfMagnitude)).toFixed(this.decimals));
 
