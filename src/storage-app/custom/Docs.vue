@@ -37,11 +37,18 @@
       </template>
     </Column>
 
+    <Column field="type" header="Type">
+      <template #body="slotProps">
+        {{ capitalize(slotProps.data.props.type) }}
+      </template>
+    </Column>
+
     <Column header="Actions">
       <template #body="slotProps">
         <div class="actions">
-          <Button title="Edit" icon="pi pi-pencil" @click="edit(slotProps.data)"/>
-          <Button title="Delete" icon="pi pi-trash" @click="remove(slotProps.data)"/>
+          <SplitButton :model="shareMenu(slotProps.data)" v-tooltip.top="'Copy download URL'" :icon="copyIcon" @click="share(slotProps.data)" :disabled="!slotProps.data.download"/>
+          <Button v-tooltip.top="'Edit'" icon="pi pi-pencil" @click="edit(slotProps.data)"/>
+          <Button v-tooltip.top="'Delete'" icon="pi pi-trash" @click="remove(slotProps.data)"/>
         </div>
       </template>
     </Column>
@@ -52,8 +59,9 @@
 import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import Button from 'primevue/button'
+import Paginator from 'primevue/paginator'
+import SplitButton from 'primevue/splitbutton'
 import FileSize from '../services/FileSize'
-import Paginator from 'primevue/paginator';
 
 export default {
   components: {
@@ -61,6 +69,7 @@ export default {
     DataTable,
     Button,
     Paginator,
+    SplitButton,
   },
 
   props: {
@@ -78,7 +87,41 @@ export default {
     },
   },
 
+  data() {
+    return {
+      state: {
+        copied: false,
+      },
+    };
+  },
+
+  computed: {
+    copyIcon() {
+      return this.state.copied ? 'pi pi-check' : 'pi pi-copy';
+    },
+  },
+
   methods: {
+    /**
+     * @param {StorageDoc} doc
+     */
+    shareMenu(doc) {
+      return [
+        {
+          label: 'Download',
+          icon: 'pi pi-external-link',
+          url: doc.download,
+          target: '_blank',
+        },
+      ];
+    },
+    /**
+     * @param {StorageDoc} doc
+     */
+    share(doc) {
+      this.copyTextToClipboard(doc.download);
+      this.$emit('share', doc);
+    },
     edit(doc) {
       this.$emit('edit', doc);
     },
@@ -91,6 +134,22 @@ export default {
     onPage(ev) {
       this.$emit('request', ev);
     },
+    capitalize(s) {
+      return s[0].toUpperCase() + s.slice(1);
+    },
+    copyTextToClipboard(text) {
+      navigator.clipboard.writeText(text)
+      .then(() => {
+        this.state.copied = true;
+        setTimeout(() => {
+          this.state.copied = false;
+        }, 1000);
+      }, (e) => {
+        setTimeout(() => {
+          this.state.copied = false;
+        }, 1000);
+      });
+    }
   },
 }
 </script>

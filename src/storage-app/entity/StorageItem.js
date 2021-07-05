@@ -2,17 +2,19 @@ class StorageItem {
   /**
    * @param {?string} id
    * @param {?string} parent_id
-   * @param {('dir'|'doc')} type
-   * @param {('local'|'kept'|'loading')} state
-   * @param {number} size
    * @param {string} name
+   * @param {number} size
+   * @param {('local'|'kept'|'loading')} state
+   * @param {('dir'|'doc')} type
    * @param {Object} props
+   * @param {?string}download
    */
-  constructor({id, parent_id, name, size = 0, state, type, props}) {
+  constructor({id, parent_id, name, size = 0, state, type, props, download = null}) {
     this.id = id;
     this.name = name;
     this.parent_id = parent_id;
     this.type = type;
+    this.download = download;
     this.props = this.makeProps(props)
   }
 

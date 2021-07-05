@@ -8,7 +8,6 @@
       <div class="p-inputgroup-addon" v-tooltip.top="'Megabytes'">MB</div>
       <InputNumber v-model="sizeInput" showButtons :min="0" :disabled="disabled"/>
     </div>
-
   </div>
 
 </template>
@@ -56,10 +55,3 @@ export default {
   },
 }
 </script>
-
-<style lang="sass">
-.p-inputgroup-addon.hoverable
-  cursor: pointer
-  &:hover
-    opacity: .8
-</style>

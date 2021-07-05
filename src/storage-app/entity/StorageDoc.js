@@ -27,9 +27,10 @@ class StorageDoc extends StorageItem {
    * @param {DocProps} props
    * @param {?File} file
    * @param {?File} preview
+   * @param {?string} download
    */
-  constructor({id, parent_id, name, size, state, props, file = null, preview = null}) {
-    super({id, parent_id, name, type: 'doc', props});
+  constructor({id, parent_id, name, size, state, props, file = null, preview = null, download = null}) {
+    super({id, parent_id, name, type: 'doc', props, download});
     this.size = size;
     this.state = state;
     this.file = file;

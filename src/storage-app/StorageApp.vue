@@ -15,7 +15,9 @@
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
     <template v-if="can.makeFile">
-      <Docs :docs="kept.docs" :dir="dirCurrent" :pagination="pagination.docs" @request="docRequest" @edit="docEdit" @remove="docRemoveDialog"/>
+      <Docs :docs="kept.docs" :dir="dirCurrent" :pagination="pagination.docs"
+            @request="docRequest" @edit="docEdit" @remove="docRemoveDialog" @share="docShare"
+      />
     </template>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
@@ -124,6 +126,10 @@ export default {
   },
 
   methods: {
+    /** @param {StorageDoc} doc */
+    docShare(doc) {
+
+    },
     /**
      * @param {{
      *   page: number
@@ -350,6 +356,7 @@ export default {
       });
 
       this.pagination.docs.total = data.docs.total;
+
       this.kept.docs = data.docs.data.map(doc => {
         return new StorageDoc({
           id: doc.id,
@@ -357,6 +364,7 @@ export default {
           state: 'kept',
           name: doc.name,
           parent_id: doc.parent_id,
+          download: doc.download,
           file: null,
           props: doc.props || {}
         });
