@@ -10,10 +10,14 @@
   >
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
-        <i class="pi pi-cloud"
-           v-tooltip="'File available'"
-           style="color: darkgreen"
-        />
+        <template v-if="slotProps.data.download">
+          <i class="pi pi-cloud" v-tooltip="'File available'" style="color: darkgreen"/>
+        </template>
+
+        <template v-else>
+          <i class="pi pi-cloud" v-tooltip="'The model file is not attached or is not available'" style="color: red"/>
+        </template>
+
         <template v-if="slotProps.data.props.size > dir.props.max_size">
           <i class="pi pi-exclamation-triangle"
              v-tooltip="'File larger than budget for this type of asset'"
