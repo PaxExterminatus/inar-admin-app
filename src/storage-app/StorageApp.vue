@@ -15,7 +15,7 @@
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
     <template v-if="can.makeFile">
-      <Docs :docs="kept.docs" :dir="dirCurrent" @edit="docEdit" @remove="docRemoveDialog"/>
+      <Docs :docs="kept.docs" :dir="dirCurrent" :pagination="pagination.docs" @request="docRequest" @edit="docEdit" @remove="docRemoveDialog"/>
     </template>
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
@@ -86,6 +86,12 @@ export default {
         progress: 0,
       },
 
+      pagination: {
+        docs: {
+          total: 0,
+        },
+      },
+
       input: {
         dir: StorageDir.empty(),
         doc: StorageDoc.empty(),
@@ -118,6 +124,37 @@ export default {
   },
 
   methods: {
+    /**
+     * @param {{
+     *   page: number
+     *   pageCount: number
+     *   rows: number
+     *   sortField: any
+     *   sortOrder: any
+     *   originalEvent: Object
+     *   multiSortMeta: Object
+     *   first: number
+     *   filters: Object
+     * }} onPageEvent
+     */
+    docRequest(onPageEvent) {
+      storageClient.docs({
+        page: onPageEvent.page + 1,
+        parentId: this.dirCurrent.id,
+        per: onPageEvent.rows,
+      })
+          .then(r => {
+            console.log(r.data);
+            this.kept.docs = r.data.docs.data;
+          })
+          .catch(e => {
+
+          })
+          .finally(() => {
+
+          });
+    },
+
     dirEdit() {
       this.errors.doc = {};
       this.state.dirEditor.open()
@@ -140,7 +177,9 @@ export default {
             this.state.docRemove.stop();
           });
     },
-    /** @param {StorageDoc} doc */
+    /**
+     * @param {StorageDoc} doc
+     */
     docEdit(doc) {
       this.errors.doc = {};
       this.input.doc = doc.copy();
@@ -154,7 +193,9 @@ export default {
       this.input.doc = new StorageDoc.empty({parent_id: parent ? parent.id : null});
     },
 
-    /** @param {ProgressEvent} e */
+    /**
+     * @param {ProgressEvent} e
+     */
     uploadProgress(e) {
       this.state.progress = FileSize.inBytes(e.total).percent(e.loaded);
     },
@@ -297,18 +338,6 @@ export default {
     },
 
     acceptStorageData(data) {
-      this.kept.docs = data.docs.map(doc => {
-        return new StorageDoc({
-          id: doc.id,
-          size: doc.size,
-          state: 'kept',
-          name: doc.name,
-          parent_id: doc.parent_id,
-          file: null,
-          props: doc.props || {}
-        });
-      });
-
       this.kept.dirs = data.dirs.map(dir => {
         return new StorageDir({
           id: dir.id,
@@ -317,6 +346,19 @@ export default {
           name: dir.name,
           parent_id: dir.parent_id,
           props: dir.props || {},
+        });
+      });
+
+      this.pagination.docs.total = data.docs.total;
+      this.kept.docs = data.docs.data.map(doc => {
+        return new StorageDoc({
+          id: doc.id,
+          size: doc.size,
+          state: 'kept',
+          name: doc.name,
+          parent_id: doc.parent_id,
+          file: null,
+          props: doc.props || {}
         });
       });
     },

@@ -1,6 +1,13 @@
 <template>
-  <DataTable class="storage-files p-datatable-sm" :value="docs">
-
+  <DataTable
+      class="storage-files p-datatable-sm"
+      :value="docs"
+      :paginator="true"
+      :rows="10"
+      :totalRecords="pagination.total"
+      :lazy="true"
+      @page="onPage($event)"
+  >
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
         <i class="pi pi-cloud"
@@ -46,12 +53,14 @@ import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import Button from 'primevue/button'
 import FileSize from '../services/FileSize'
+import Paginator from 'primevue/paginator';
 
 export default {
   components: {
     Column,
     DataTable,
     Button,
+    Paginator,
   },
 
   props: {
@@ -60,6 +69,10 @@ export default {
       default: () => [],
     },
     dir: {
+      type: Object,
+      default: () => ({}),
+    },
+    pagination: {
       type: Object,
       default: () => ({}),
     },
@@ -74,6 +87,9 @@ export default {
     },
     sizeFormat(bytes) {
       return FileSize.inBytes(bytes).format();
+    },
+    onPage(ev) {
+      this.$emit('request', ev);
     },
   },
 }
@@ -92,4 +108,7 @@ export default {
   .column-preview-body
     display: flex
     justify-content: center
+.p-datatable .p-paginator-bottom
+  position: sticky
+  bottom: 0
 </style>

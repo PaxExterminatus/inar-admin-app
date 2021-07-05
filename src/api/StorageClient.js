@@ -60,6 +60,10 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000/api/admin';
 let uploadCancelTokenSource = axios.CancelToken.source();
 
 class StorageClient {
+  docs({page = 1, parentId, per = 10}) {
+    return axios.get(`/storage/${parentId}/docs/${per}`, {params: {page}});
+  }
+
   /**
    * @param {?string} id
    * @returns {Promise<StorageGetResponse>}
