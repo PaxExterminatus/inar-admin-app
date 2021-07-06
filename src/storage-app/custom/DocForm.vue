@@ -4,7 +4,7 @@
 
       <TabPanel header="Model">
 
-        <InputFile @file="select" :errors="errors" v-model="input.name" @validate="$emit('validate', $event)"/>
+        <InputFile @file="select" :errors="errors" v-model="input.name" @validate="validateFile"/>
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file">
@@ -151,10 +151,6 @@ export default {
       default: () => ({}),
     },
 
-    validation: {
-      extension: '',
-    },
-
     currentDir: {
       type: Object,
       default: () => ({}),
@@ -193,6 +189,10 @@ export default {
   },
 
   methods: {
+    validateFile(hasError) {
+      this.$emit('validate', hasError);
+    },
+
     fileSize(bytes) {
       return FileSize.inBytes(bytes);
     },

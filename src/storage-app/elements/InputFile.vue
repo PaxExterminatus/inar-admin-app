@@ -50,10 +50,12 @@ export default {
   },
 
   watch: {
-    inputFilename(filename) {
-      this.$emit('update:modelValue', filename);
+    modelValue(filename) {
       this.hasError = !['obj', 'fbx'].includes(this.extension);
       this.$emit('validate', this.hasError);
+    },
+    inputFilename(filename) {
+      this.$emit('update:modelValue', filename);
     },
   },
 
@@ -65,7 +67,7 @@ export default {
 
   methods: {
     getExtension(filename) {
-      return filename.split('.').length > 1 ? filename.split('.').pop() : filename.split('.')[1] || '';
+      return filename.split('.').pop();
     },
 
     storageFileInputOpen() {
