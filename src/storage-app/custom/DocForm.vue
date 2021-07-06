@@ -21,7 +21,7 @@
         <ErrorLine class="input-line" :errors="errors['props.polygons']">
           <label for="polygons">
             Polygons
-            <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'Polygons limit'" :value="fileSize(dir.maxPolygons).format()"/>
+            <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'Polygons limit'" :value="dir.maxPolygons"/>
           </label>
           <InputNumber id="polygons" v-model="input.props.polygons" showButtons/>
 
