@@ -1,7 +1,7 @@
 <template>
   <div>
     <label>
-      Size {{ sizeFormat }}
+      File size {{ sizeFormat }}
       <slot></slot>
     </label>
     <div class="p-inputgroup">

@@ -4,11 +4,11 @@
 
       <TabPanel header="Model">
 
-        <InputFile @select="select" :errors="errors" v-model="input.name" @validate="$emit('validate', $event)"/>
+        <InputFile @file="select" :errors="errors" v-model="input.name" @validate="$emit('validate', $event)"/>
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file">
-            | Recommended {{ fileSize(dir.maxSize).format() }}
+            <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'File size limit'" :value="fileSize(dir.maxSize).format()"/>
           </InputFileSize>
 
           <template #tags>
@@ -19,7 +19,10 @@
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.polygons']">
-          <label for="polygons">Polygons</label>
+          <label for="polygons">
+            Polygons
+            <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'Polygons limit'" :value="fileSize(dir.maxPolygons).format()"/>
+          </label>
           <InputNumber id="polygons" v-model="input.props.polygons" showButtons/>
 
           <template #tags>

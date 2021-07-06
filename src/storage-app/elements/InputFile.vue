@@ -1,14 +1,13 @@
 <template>
   <ErrorLine class="input-file input-line" :errors="errors['name'] || errors['file']">
 
-    <label for="name">File | Filename</label>
+    <label for="name">File</label>
     <div class="p-inputgroup">
+      <input class="p-inputtext p-component" id="name" v-model="inputFilename"/>
       <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
-      <InputText id="name" v-model="inputFilename"/>
-      <span class="p-inputgroup-addon">.{{extension}}</span>
     </div>
 
-    <template #tags v-if="extensionError">
+    <template #tags v-if="extension && extensionError">
       <Tag v-tooltip.top="'Invalid file extension, expected .obj or .fbx'" icon="pi pi-exclamation-triangle" severity="danger" :value="`.${extension}`"></Tag>
     </template>
 
@@ -19,15 +18,13 @@
 <script>
 import Tag from 'primevue/tag'
 import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
 import { ErrorLine } from '../elements'
 
 export default {
   components: {
-    ErrorLine,
-    Button,
-    InputText,
     Tag,
+    Button,
+    ErrorLine,
   },
 
   props: {
@@ -43,48 +40,31 @@ export default {
 
   data() {
     return {
-      filename: '',
-      extension: '',
+      inputFilename: '',
     };
   },
 
-
   mounted() {
-    this.splitFilename(this.modelValue);
-  },
-
-  computed: {
-    extensionError() {
-      if (!this.modelValue) return false;
-      const hasError = !['obj', 'fbx'].includes(this.extension);
-      this.$emit('validate', hasError);
-      return hasError;
-    },
-
-    inputFilename: {
-      get() {
-        return this.modelValue;
-      },
-      set(filename) {
-        this.splitFilename(filename);
-        this.$emit('update:modelValue', filename);
-      },
-    },
+    this.inputFilename = this.modelValue;
   },
 
   watch: {
-    modelValue(filename) {
-      console.log('watch.modelValue');
-      this.splitFilename(filename);
-    }
+    inputFilename(filename) {
+      this.$emit('update:modelValue', filename);
+      const hasError = !['obj', 'fbx'].includes(this.extension);
+      this.$emit('validate', hasError);
+    },
+  },
+
+  computed: {
+    extension() {
+      return this.getExtension(this.modelValue);
+    },
   },
 
   methods: {
-    splitFilename(filename) {
-      const name = filename.split('.').slice(0, -1).join('.');
-      this.name = name;
-      this.filename = name;
-      this.extension = filename.split('.').length > 1 ? filename.split('.').pop() : filename.split('.')[1] || '';
+    getExtension(filename) {
+      return filename.split('.').length > 1 ? filename.split('.').pop() : filename.split('.')[1] || '';
     },
 
     storageFileInputOpen() {
@@ -93,16 +73,10 @@ export default {
 
     storageFileInputChange() {
       const file = this.$refs.storageFileInput.files[0];
-      this.splitFilename(file.name);
-      this.$emit('select', file);
+      this.inputFilename = file.name;
+      this.$emit('file', file);
     },
   },
 }
 </script>
 
-<style lang="sass">
-.input-file
-  width: 100%
-  .p-inputgroup-addon.invalid
-    color: darkred
-</style>
