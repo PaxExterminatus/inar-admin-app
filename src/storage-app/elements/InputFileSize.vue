@@ -1,8 +1,7 @@
 <template>
   <div>
     <label>
-      File size {{ sizeFormat }}
-      <slot></slot>
+      <slot></slot> {{ sizeFormat }}
     </label>
     <div class="p-inputgroup">
       <div class="p-inputgroup-addon" v-tooltip.top="'Megabytes'">MB</div>

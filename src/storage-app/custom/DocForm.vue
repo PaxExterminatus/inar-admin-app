@@ -8,6 +8,7 @@
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
           <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file">
+            File size
             <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'File size limit'" :value="fileSize(dir.maxSize).format()"/>
           </InputFileSize>
 

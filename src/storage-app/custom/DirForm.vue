@@ -6,8 +6,9 @@
     </ErrorLine>
 
     <ErrorLine class="input-line" :errors="errors['props.max_size']">
-      <label>Maximum file size</label>
-      <InputFileSize v-model="input.props.max_size"/>
+      <InputFileSize v-model="input.props.max_size">
+        Maximum file size
+      </InputFileSize>
     </ErrorLine>
 
     <ErrorLine class="input-line" :errors="errors['props.max_polygons']">
