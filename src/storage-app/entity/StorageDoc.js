@@ -98,6 +98,7 @@ class StorageDoc extends StorageItem {
       state: this.state,
       size: this.size,
       props: this.props,
+      parent: this.parent,
     });
   }
 
@@ -123,10 +124,11 @@ class StorageDoc extends StorageItem {
   /**
    * @return {StorageDoc}
    */
-  static empty({name = '', parent_id = null} = {name: '', parent_id: null}) {
+  static empty({name = '', parent = null} = {name: '', parent_id: null}) {
     return new StorageDoc({
       id: null,
-      parent_id,
+      parent_id: parent ? parent.id || null : null,
+      parent: parent,
       name,
       size: 0,
       state: 'local',

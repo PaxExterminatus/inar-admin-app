@@ -1,36 +1,17 @@
 <template>
-  <DataTable
-      class="storage-files p-datatable-sm"
-      :value="docs"
-      :paginator="true"
-      :rows="10"
-      :totalRecords="pagination.total"
-      :lazy="true"
-      @page="onPage($event)"
+  <DataTable class="storage-files p-datatable-sm" :value="docs" :paginator="true" :rows="10"
+      :totalRecords="pagination.total" :lazy="true" @page="onPage($event)"
   >
 
-    <!--<Column field="parent" header="Folder">-->
-    <!--  <template #body="slotProps">-->
-    <!--    <ParentColumn :slot-props="slotProps"/>-->
-    <!--  </template>-->
-    <!--</Column>-->
+    <Column field="parent" header="Folder">
+      <template #body="slotProps">
+        <ParentColumn :slot-props="slotProps"/>
+      </template>
+    </Column>
 
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
-        <template v-if="slotProps.data.download">
-          <i class="pi pi-cloud" v-tooltip="'File available'" style="color: darkgreen"/>
-        </template>
-
-        <template v-else>
-          <i class="pi pi-cloud" v-tooltip="'The model file is not attached or is not available'" style="color: red"/>
-        </template>
-
-        <template v-if="false">
-          <i class="pi pi-exclamation-triangle"
-             v-tooltip="'File larger than budget for this type of asset'"
-             style="color: darkorange"
-          />
-        </template>
+        <StateColumn :slot-props="slotProps"/>
       </template>
     </Column>
 
@@ -38,7 +19,7 @@
 
     <Column field="preview" header="Preview" headerClass="column-preview" bodyClass="column-preview-body">
       <template #body="slotProps">
-        <img :src="slotProps.data.props.cover" class="product-image"/>
+        <CoverColumn :slot-props="slotProps"/>
       </template>
     </Column>
 

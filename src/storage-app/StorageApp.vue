@@ -29,7 +29,7 @@
     </EditDialog>
 
     <EditDialog :state="state.docEditor" :progress="state.progress" @save="docSave">
-      <DocForm :inp="input.doc" :errors="errors.doc" :current-dir="dirCurrent" :progress="state.progress" @validate="state.docEditor.options.disabled = $event"/>
+      <DocForm :inp="input.doc" :errors="errors.doc" :progress="state.progress" @validate="state.docEditor.options.disabled = $event"/>
     </EditDialog>
 
     <EditDialog :state="state.dirRemove" @save="dirRemove">
@@ -219,8 +219,8 @@ export default {
     docCreate() {
       this.errors.doc = {};
       this.state.docEditor.open();
-      const parent = this.dirCurrent;
-      this.input.doc = new StorageDoc.empty({parent_id: parent ? parent.id : null});
+      console.log('this.dirCurrent', this.dirCurrent);
+      this.input.doc = new StorageDoc.empty({parent: this.dirCurrent});
     },
 
     /**

@@ -7,7 +7,7 @@ import { Dir } from '../../../elements'
 
 export default {
   components: {
-    Dir
+    Dir,
   },
 
   props: {

@@ -1,19 +1,19 @@
 <template>
   <div class="form-component doc-form">
-    <TabView>
 
+    <TabView>
       <TabPanel header="Model">
 
-        <InputFile @file="select" :errors="errors" v-model="input.name" @validate="validateFile"/>
+        <InputFile @file="select" :errors="errors" v-model="doc.name" @validate="validateFile"/>
 
         <ErrorLine class="input-line" :errors="errors['props.size']">
-          <InputFileSize v-model="input.props.size" :disabled="!!input.file" :sync="!input.file">
+          <InputFileSize v-model="doc.props.size" :disabled="!!doc.file" :sync="!doc.file">
             File size
-            <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'File size limit'" :value="fileSize(dir.maxSize).format()"/>
+            <Tag severity="info" icon="pi pi-info-circle" class="p-m-lg-auto" v-tooltip.top="'File size limit'" :value="fileSize(dir.maxSize).format()"/>
           </InputFileSize>
 
           <template #tags>
-            <template v-if="input.props.size > dir.maxSize">
+            <template v-if="doc.props.size > dir.maxSize">
               <Tag v-tooltip.top="'File larger than budget for this type of asset'" icon="pi pi-exclamation-triangle" severity="warning" :value="fileSize(dir.maxSize).format()"/>
             </template>
           </template>
@@ -22,12 +22,12 @@
         <ErrorLine class="input-line" :errors="errors['props.polygons']">
           <label for="polygons">
             Polygons
-            <Tag severity="info" class="p-m-lg-auto" v-tooltip.top="'Polygons limit'" :value="dir.maxPolygons"/>
+            <Tag severity="info" icon="pi pi-info-circle" class="p-m-lg-auto" v-tooltip.top="'Polygons limit'" :value="dir.maxPolygons"/>
           </label>
-          <InputNumber id="polygons" v-model="input.props.polygons" showButtons/>
+          <InputNumber id="polygons" v-model="doc.props.polygons" showButtons/>
 
           <template #tags>
-            <template v-if="input.props.polygons > dir.maxPolygons">
+            <template v-if="doc.props.polygons > dir.maxPolygons">
               <Tag v-tooltip.top="'Too many polygons for this type of asset'" icon="pi pi-exclamation-triangle" severity="warning" :value="dir.maxPolygons"/>
             </template>
           </template>
@@ -35,7 +35,7 @@
 
         <ErrorLine class="input-line" :errors="errors['props.type']">
           <label for="polygons">Type</label>
-          <Dropdown v-model="input.props.type" :options="typeOptions" optionLabel="name" optionValue="code"/>
+          <Dropdown v-model="doc.props.type" :options="typeOptions" optionLabel="name" optionValue="code"/>
         </ErrorLine>
       </TabPanel>
 
@@ -45,7 +45,7 @@
           <label for="url">Preview</label>
           <div class="input-image">
             <div class="product-preview" >
-              <img class="image-box" v-if="preview || input.props.preview" :src="preview || input.props.cover" alt="Model Cover">
+              <img class="image-box" v-if="preview || doc.props.preview" :src="preview || doc.props.cover" alt="Model Cover">
               <div class="image-box" v-else>
                 <i class="pi pi-image"/>
               </div>
@@ -68,46 +68,46 @@
         <ErrorLine class="input-line" :errors="errors['props.url']">
           <div class="input-image">
             <div class="product-preview" >
-              <img class="image-box" v-if="input.props.url" :src="input.props.url" alt="Model Cover">
+              <img class="image-box" v-if="doc.props.url" :src="doc.props.url" alt="Model Cover">
               <div class="image-box" v-else>
                 <i class="pi pi-image"/>
               </div>
             </div>
             <div class="actions">
-              <template v-if="input.props.url">
+              <template v-if="doc.props.url">
                 <Button class="to-right" title="Select file" icon="pi pi-times" @click="clearUrl"/>
               </template>
             </div>
           </div>
 
           <label for="url">URL</label>
-          <InputText id="url" v-model="input.props.url"/>
+          <InputText id="url" v-model="doc.props.url"/>
         </ErrorLine>
       </TabPanel>
 
       <TabPanel header="Description">
         <ErrorLine class="input-line" :errors="errors['props.description']">
           <label for="description">Description</label>
-          <Textarea id="description" v-model="input.props.description" :autoResize="true"/>
+          <Textarea id="description" v-model="doc.props.description" :autoResize="true"/>
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.note']">
           <label for="note">Note</label>
-          <InputText id="note" v-model="input.props.note"/>
+          <InputText id="note" v-model="doc.props.note"/>
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.topic']">
           <label for="Topic">Topic</label>
-          <InputText id="topic" v-model="input.props.topic"/>
+          <InputText id="topic" v-model="doc.props.topic"/>
         </ErrorLine>
 
         <ErrorLine class="input-line" :errors="errors['props.thesis']">
           <label for="Thesis">Thesis</label>
-          <InputText id="thesis" v-model="input.props.thesis"/>
+          <InputText id="thesis" v-model="doc.props.thesis"/>
         </ErrorLine>
       </TabPanel>
-
     </TabView>
+
   </div>
 </template>
 
@@ -123,7 +123,6 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { ErrorLine, InputFileSize, InputFile } from '../elements'
 import FileSize from '../services/FileSize'
-
 
 export default {
   components: {
@@ -152,11 +151,6 @@ export default {
       default: () => ({}),
     },
 
-    currentDir: {
-      type: Object,
-      default: () => ({}),
-    },
-
     progress: {
       type: Number,
       default: 0,
@@ -177,15 +171,15 @@ export default {
 
   computed: {
     /** @returns {StorageDoc|Object} */
-    input() {
+    doc() {
       return this.inp;
     },
     /** @returns {StorageDir|Object} */
     dir() {
-      return this.currentDir;
+      return this.inp.parent;
     },
     size() {
-      return FileSize.inBytes(this.input.props.size).size();
+      return FileSize.inBytes(this.doc.props.size).size();
     },
   },
 
@@ -199,11 +193,11 @@ export default {
     },
     cancel() {
       this.preview = null;
-      this.input.previewDetach();
+      this.doc.previewDetach();
     },
 
     clearUrl() {
-      this.input.props.url = null;
+      this.doc.props.url = null;
     },
 
     storagePreviewInputOpen() {
@@ -213,16 +207,16 @@ export default {
     storagePreviewInputChange() {
       const file = this.$refs.storagePreviewInput.files[0];
       this.preview = URL.createObjectURL(file);
-      this.input.previewAttach(file);
+      this.doc.previewAttach(file);
     },
 
     /**
      * @param {File} file
      */
     select(file) {
-      this.input.file = file;
-      this.input.name = file.name;
-      this.input.props.size = file.size;
+      this.doc.file = file;
+      this.doc.name = file.name;
+      this.doc.props.size = file.size;
     },
   },
 }
