@@ -146,7 +146,7 @@ export default {
         },
       })
           .then(r => {
-            this.kept.docs = r.data.docs.data;
+            this.acceptStorageData(r.data.docs.data);
           })
           .catch(e => {
 
@@ -372,31 +372,36 @@ export default {
     },
 
     acceptStorageData(data) {
-      this.kept.dirs = data.dirs.map(dir => {
-        return new StorageDir({
-          id: dir.id,
-          state: 'kept',
-          size: dir.size,
-          name: dir.name,
-          parent_id: dir.parent_id,
-          props: dir.props || {},
+      if (data.dirs) {
+        this.kept.dirs = data.dirs.map(dir => {
+          return new StorageDir({
+            id: dir.id,
+            state: 'kept',
+            size: dir.size,
+            name: dir.name,
+            parent_id: dir.parent_id,
+            props: dir.props || {},
+          });
         });
-      });
+      }
 
-      this.pagination.docs.total = data.docs.total;
+      if (data.docs) {
+        this.pagination.docs.total = data.docs.total;
 
-      this.kept.docs = data.docs.data.map(doc => {
-        return new StorageDoc({
-          id: doc.id,
-          size: doc.size,
-          state: 'kept',
-          name: doc.name,
-          parent_id: doc.parent_id,
-          download: doc.download,
-          file: null,
-          props: doc.props || {}
+        this.kept.docs = data.docs.data.map(doc => {
+          return new StorageDoc({
+            id: doc.id,
+            size: doc.size,
+            state: 'kept',
+            name: doc.name,
+            parent_id: doc.parent_id,
+            download: doc.download,
+            file: null,
+            props: doc.props || {}
+          });
         });
-      });
+      }
+
     },
   },
 }
