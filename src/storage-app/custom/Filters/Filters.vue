@@ -97,7 +97,7 @@ export default {
   methods: {
     search() {
       this.st.loadingOn();
-      console.log('search');
+      this.$emit('search');
     },
   },
 }

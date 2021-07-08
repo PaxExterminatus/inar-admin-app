@@ -18,7 +18,7 @@
       {{state.filters}}
     </div>
 
-    <Filters class="p-my-1" :state="state.filters"/>
+    <Filters class="p-my-1" :state="state.filters" @search="docSearch"/>
 
     <Docs :docs="kept.docs"
           :dir="dirCurrent"
@@ -26,7 +26,6 @@
           @edit="docEdit"
           @request="docRequest"
           @remove="docRemoveDialog"
-          @share="docShare"
     />
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
@@ -137,10 +136,26 @@ export default {
   },
 
   methods: {
-    /** @param {StorageDoc} doc */
-    docShare(doc) {
+    docSearch() {
+      storageClient.docs({
+        parent: this.dirCurrent ? this.dirCurrent.id || null : null,
+        filter: this.state.filters.input,
+        pagination: {
+          per: 15,
+          page: 1,
+        },
+      })
+          .then(r => {
+            this.kept.docs = r.data.docs.data;
+          })
+          .catch(e => {
 
+          })
+          .finally(() => {
+            this.state.filters.loadingOff();
+          });
     },
+
     /**
      * @param {{
      *   page: number
@@ -156,12 +171,14 @@ export default {
      */
     docRequest(onPageEvent) {
       storageClient.docs({
-        page: onPageEvent.page + 1,
-        parentId: this.dirCurrent.id,
-        per: onPageEvent.rows,
+        parent: this.dirCurrent ? this.dirCurrent.id || null : null,
+        filter: this.state.filters.input,
+        pagination: {
+          per: onPageEvent.rows,
+          page: onPageEvent.page,
+        },
       })
           .then(r => {
-            console.log(r.data);
             this.kept.docs = r.data.docs.data;
           })
           .catch(e => {

@@ -61,8 +61,23 @@ axios.defaults.baseURL = window.ENV_STORAGE_API;
 let uploadCancelTokenSource = axios.CancelToken.source();
 
 class StorageClient {
-  docs({page = 1, parentId, per = 10}) {
-    return axios.get(`/storage/${parentId}/docs/${per}`, {params: {page}});
+  /**
+   * @param {Object} pagination
+   * @param {Object} filter
+   * @param {?string} parent
+   * @return {Promise<AxiosResponse<any>>}
+   */
+  docs({pagination, filter, parent}) {
+    const filter64 = btoa(JSON.stringify(filter));
+    const pagination64 = btoa(JSON.stringify(pagination));
+    return axios.get(`/storage/docs`, {
+      params:
+          {
+            filter: filter64,
+            pagination: pagination64,
+            parent: parent
+          }
+    });
   }
 
   /**
