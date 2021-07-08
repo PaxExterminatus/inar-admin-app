@@ -15,6 +15,11 @@
     margin-left: auto
   & > button
     margin: 5px
+.actions-box
+  display: flex
+  flex-wrap: wrap
+  .action
+    margin: 5px
 .actions-column
   @extend .actions
   flex-direction: column
@@ -74,3 +79,6 @@
 .p-tabview-nav
   position: sticky
   top: 0
+
+.p-toolbar-group-left, .p-toolbar-group-right
+  flex-wrap: wrap

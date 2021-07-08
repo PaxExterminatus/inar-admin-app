@@ -14,11 +14,20 @@
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <template v-if="can.makeFile">
-      <Docs :docs="kept.docs" :dir="dirCurrent" :pagination="pagination.docs"
-            @request="docRequest" @edit="docEdit" @remove="docRemoveDialog" @share="docShare"
-      />
-    </template>
+    <div>
+      {{state.filters}}
+    </div>
+
+    <Filters class="p-my-1" :state="state.filters"/>
+
+    <Docs :docs="kept.docs"
+          :dir="dirCurrent"
+          :pagination="pagination.docs"
+          @edit="docEdit"
+          @request="docRequest"
+          @remove="docRemoveDialog"
+          @share="docShare"
+    />
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
       <DirForm :inp="input.dir" :errors="errors.dir"/>
@@ -53,7 +62,7 @@ import Button from 'primevue/button'
 import Toast from 'primevue/toast';
 import { storageClient } from '../api/StorageClient'
 import { EditDialog, EditDialogOptions, EditDialogState } from './elements/EditDialog'
-import { DirForm, DocForm, Docs, Dirs } from './custom'
+import { DirForm, DocForm, Docs, Dirs, filters } from './custom'
 import { StorageDir, StorageDoc } from './entity'
 import { Dir } from './elements';
 import FileSize from './services/FileSize'
@@ -69,6 +78,7 @@ export default {
     Dir,
     Toast,
     Divider,
+    ...filters.components,
   },
 
   data() {
@@ -86,6 +96,7 @@ export default {
         dirRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove folder').yes({label: 'Yes'})),
         docRemove: EditDialogState.make(EditDialogOptions.init().headerSet('Remove model').yes({label: 'Yes'})),
         progress: 0,
+        filters: new filters.state.FiltersState(),
       },
 
       pagination: {
