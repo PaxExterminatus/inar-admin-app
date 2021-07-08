@@ -219,7 +219,6 @@ export default {
     docCreate() {
       this.errors.doc = {};
       this.state.docEditor.open();
-      console.log('this.dirCurrent', this.dirCurrent);
       this.input.doc = new StorageDoc.empty({parent: this.dirCurrent});
     },
 

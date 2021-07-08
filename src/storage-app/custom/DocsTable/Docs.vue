@@ -5,13 +5,28 @@
 
     <Column field="parent" header="Folder">
       <template #body="slotProps">
-        <ParentColumn :slot-props="slotProps"/>
+        <Dir :dir="slotProps.data.parent"/>
       </template>
     </Column>
 
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
-        <StateColumn :slot-props="slotProps"/>
+        <div class="docs-state-column">
+          <template v-if="slotProps.data.download">
+            <i class="pi pi-cloud" v-tooltip="'File available'" style="color: darkgreen"/>
+          </template>
+
+          <template v-else>
+            <i class="pi pi-cloud" v-tooltip="'The model file is not attached or is not available'" style="color: red"/>
+          </template>
+
+          <template v-if="slotProps.data.size > asDir(slotProps.data.parent).maxSize">
+            <i class="pi pi-exclamation-triangle"
+               v-tooltip="'File larger than budget for this type of asset'"
+               style="color: darkorange"
+            />
+          </template>
+        </div>
       </template>
     </Column>
 
@@ -19,7 +34,7 @@
 
     <Column field="preview" header="Preview" headerClass="column-preview" bodyClass="column-preview-body">
       <template #body="slotProps">
-        <CoverColumn :slot-props="slotProps"/>
+        <img class="product-image" :title="slotProps.data.name" :alt="slotProps.data.name" :src="slotProps.data.props.cover"/>
       </template>
     </Column>
 
@@ -54,7 +69,7 @@ import Button from 'primevue/button'
 import Paginator from 'primevue/paginator'
 import SplitButton from 'primevue/splitbutton'
 import FileSize from '../../services/FileSize'
-import { docsColumns } from './column'
+import { Dir } from '../../elements'
 
 export default {
   components: {
@@ -63,7 +78,7 @@ export default {
     Button,
     Paginator,
     SplitButton,
-    ...docsColumns.components,
+    Dir,
   },
 
   props: {
@@ -96,6 +111,13 @@ export default {
   },
 
   methods: {
+    /**
+     * @param {StorageDir} dir
+     * @return {StorageDir}
+     */
+    asDir(dir) {
+      return dir;
+    },
     /**
      * @param {StorageDoc} doc
      */
