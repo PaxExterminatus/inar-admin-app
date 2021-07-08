@@ -1,4 +1,5 @@
 import StorageItem from './StorageItem';
+import StorageDir from './StorageDir';
 
 class DocProps {
   constructor({preview = null, url = null, polygons = null, size = null,
@@ -28,14 +29,28 @@ class StorageDoc extends StorageItem {
    * @param {?File} file
    * @param {?File} preview
    * @param {?string} download
+   * @param {StorageItem} parent
    */
-  constructor({id, parent_id, name, size, state, props, file = null, preview = null, download = null}) {
-    super({id, parent_id, name, type: 'doc', props, download});
+  constructor({id, parent_id, name, size, state, props,
+                file = null, preview = null, download = null, parent = null}) {
+
+    super({id, parent_id, name, type: 'doc', props, download,});
     this.size = size;
     this.state = state;
     this.file = file;
     this.preview = preview;
     this.polygons = 0;
+
+    if (parent) {
+      this.parent = new StorageDir({
+        id: parent.id,
+        parent_id: parent.parent_id,
+        name:  parent.name,
+        state: 'kept',
+        size: parent.size,
+        props: parent.props,
+      });
+    }
   }
 
   /**

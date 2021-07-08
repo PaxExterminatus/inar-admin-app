@@ -8,6 +8,13 @@
       :lazy="true"
       @page="onPage($event)"
   >
+
+    <!--<Column field="parent" header="Folder">-->
+    <!--  <template #body="slotProps">-->
+    <!--    <ParentColumn :slot-props="slotProps"/>-->
+    <!--  </template>-->
+    <!--</Column>-->
+
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">
         <template v-if="slotProps.data.download">
@@ -18,7 +25,7 @@
           <i class="pi pi-cloud" v-tooltip="'The model file is not attached or is not available'" style="color: red"/>
         </template>
 
-        <template v-if="slotProps.data.props.size > dir.props.max_size">
+        <template v-if="false">
           <i class="pi pi-exclamation-triangle"
              v-tooltip="'File larger than budget for this type of asset'"
              style="color: darkorange"
@@ -65,7 +72,8 @@ import DataTable from 'primevue/datatable'
 import Button from 'primevue/button'
 import Paginator from 'primevue/paginator'
 import SplitButton from 'primevue/splitbutton'
-import FileSize from '../services/FileSize'
+import FileSize from '../../services/FileSize'
+import { docsColumns } from './column'
 
 export default {
   components: {
@@ -74,6 +82,7 @@ export default {
     Button,
     Paginator,
     SplitButton,
+    ...docsColumns.components,
   },
 
   props: {

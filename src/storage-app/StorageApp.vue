@@ -14,10 +14,6 @@
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <div>
-      {{state.filters}}
-    </div>
-
     <Filters class="p-my-1" :state="state.filters" @search="docSearch"/>
 
     <Docs :docs="kept.docs"
@@ -146,7 +142,7 @@ export default {
         },
       })
           .then(r => {
-            this.acceptStorageData(r.data.docs.data);
+            this.acceptStorageData(r.data);
           })
           .catch(e => {
 
@@ -397,7 +393,8 @@ export default {
             parent_id: doc.parent_id,
             download: doc.download,
             file: null,
-            props: doc.props || {}
+            props: doc.props || {},
+            parent: doc.parent || null,
           });
         });
       }

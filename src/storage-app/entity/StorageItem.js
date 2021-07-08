@@ -8,6 +8,7 @@ class StorageItem {
    * @param {('dir'|'doc')} type
    * @param {Object} props
    * @param {?string}download
+   * @param {StorageDir} parent
    */
   constructor({id, parent_id, name, size = 0, state, type, props, download = null}) {
     this.id = id;

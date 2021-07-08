@@ -1,5 +1,6 @@
 import axios from 'axios'
-axios.defaults.baseURL = window.ENV_STORAGE_API;
+//axios.defaults.baseURL = window.ENV_STORAGE_API;
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api/admin/';
 
 /**
  * @typedef {{
