@@ -10,6 +10,7 @@
       <Button v-tooltip.top="'Delete folder'" icon="pi pi-trash" @click="dirRemoveDialog" :disabled="!input.dir.id"/>
       <Divider layout="vertical"/>
       <Button v-tooltip.top="'Create model'" icon="pi pi-cloud-upload" @click="docCreate" :disabled="!can.makeFile"/>
+      <ToggleButton v-tooltip.top="'Search'" onIcon="pi pi-search" offIcon="pi pi-search" v-model="state.filters.state.show"/>
     </div>
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
@@ -63,6 +64,7 @@ import { StorageDir, StorageDoc } from './entity'
 import { Dir } from './elements';
 import FileSize from './services/FileSize'
 import Column from 'primevue/column'
+import ToggleButton from 'primevue/togglebutton'
 
 export default {
   components: {
@@ -77,6 +79,7 @@ export default {
     Divider,
     Column,
     ...filters.components,
+    ToggleButton,
   },
 
   data() {
@@ -158,7 +161,7 @@ export default {
 
           })
           .finally(() => {
-            this.state.filters.loadingOff();
+            this.state.filters.searchStop();
           });
     },
 
@@ -367,6 +370,7 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirOpenNav(dir) {
+      this.state.filters.dir = dir;
       this.input.dir = StorageDir.empty();
       this.getStorageDir(dir);
       const position = this.nav.dirs.findIndex(iDir => iDir.id === dir.id);
@@ -378,28 +382,35 @@ export default {
       this.root.select();
       this.nav.dirs = [];
       this.input.dir = StorageDir.empty();
-      this.getStorage()
-          .finally(() => {
-            this.root.stop();
-          });
+      storageClient.get({
+        id: null,
+        filter: this.state.filters.input,
+        pagination: {
+          page: 1,
+          per: 15,
+        },
+      }).then(r => {
+        this.acceptStorageData(r.data)
+      }).finally(() => {
+        this.root.stop();
+      });
     },
 
-    getStorage() {
-      return storageClient.get()
-          .then(r => {
-            this.acceptStorageData(r.data)
-          });
-    },
     /** @param {StorageDir} dir */
     getStorageDir(dir) {
       dir.wait();
-      return storageClient.get(dir.id)
-          .then(r => {
-            this.acceptStorageData(r.data)
-          })
-          .finally(() => {
-            dir.stop();
-          });
+      return storageClient.get({
+        id: dir.id,
+        filter: this.state.filters.input,
+        pagination: {
+          page: 1,
+          per: 15,
+        },
+      }).then(r => {
+        this.acceptStorageData(r.data)
+      }).finally(() => {
+        dir.stop();
+      });
     },
 
     acceptStorageData(data) {

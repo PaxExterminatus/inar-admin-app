@@ -83,13 +83,18 @@ class StorageClient {
 
   /**
    * @param {?string} id
+   * @param {FilterInput} filter
+   * @param {{page: number, per: number}} pagination
    * @returns {Promise<StorageGetResponse>}
    */
-  get(id= null) {
-    let url = '/storage';
-    if (id) url += `/${id}`;
+  get({id, filter, pagination})
+  {
+    const params = {
+      filter: btoa(JSON.stringify(filter)),
+      pagination: btoa(JSON.stringify(pagination)),
+    };
 
-    return axios.get(url);
+    return axios.get(`/storage/${id || ''}`, {params});
   }
 
   /**
@@ -134,15 +139,13 @@ class StorageClient {
   /**
    * @param {string} id
    * @param {FilterInput} filter
-   * @param {Object} pagination
+   * @param {{page: number, per: number}} pagination
    * @return Promise<StorageGetResponse>
    */
   delete({id, filter, pagination}) {
-    const filter64 = btoa(JSON.stringify(filter));
-    const pagination64 = btoa(JSON.stringify(pagination));
     const params = {
-      filter: filter64,
-      pagination: pagination64,
+      filter: btoa(JSON.stringify(filter)),
+      pagination: btoa(JSON.stringify(pagination)),
     };
     return axios.delete(`/storage/${id}`, {params});
   }

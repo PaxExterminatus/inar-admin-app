@@ -1,8 +1,5 @@
 <template>
   <div class="input-min-max p-inputgroup">
-    <div class="p-inputgroup-addon" v-tooltip.top="help">
-      <i class="pi" :class="icon"/>
-    </div>
     <InputNumber class="input-min" v-model="input.min" v-tooltip.top="'From'"/>
     <InputNumber class="input-max" v-model="input.max" v-tooltip.top="'To'"/>
   </div>

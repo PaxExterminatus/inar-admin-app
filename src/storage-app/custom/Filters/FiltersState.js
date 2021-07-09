@@ -32,6 +32,7 @@ class FilterInput extends FilterParams  {
             min: 0,
             max: 0,
         };
+        this.dirId = '';
     }
 }
 
@@ -49,6 +50,8 @@ class FiltersState extends Filter {
             loading: false,
             disabled: false,
             dynamic: false,
+
+            show: false,
 
             search: {
                 loading: false,
@@ -86,20 +89,13 @@ class FiltersState extends Filter {
         this.state.filter.disabled = false;
     }
 
-    loadingOn() {
-        this.state.loading = true;
+    clear() {
+        this.input = new FilterInput();
     }
 
-    loadingOff() {
-        this.state.loading = false;
-    }
-
-    disabledOn() {
-        this.state.loading = true;
-    }
-
-    disabledOff() {
-        this.state.loading = false;
+    /** @param {?StorageDir} dir */
+    set dir(dir) {
+        this.input.dirId = dir.id;
     }
 }
 
