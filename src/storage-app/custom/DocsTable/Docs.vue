@@ -2,11 +2,11 @@
   <DataTable class="storage-files p-datatable-sm" :value="docs" :paginator="true" :rows="10"
       :totalRecords="pagination.total" :lazy="true" @page="onPage($event)"
   >
-    <Column field="parent" header="Folder" v-if="showDir">
-      <template #body="slotProps">
-        <Dir :dir="slotProps.data.parent"/>
-      </template>
-    </Column>
+<!--    <Column field="parent" header="Folder" v-if="showDir">-->
+<!--      <template #body="slotProps">-->
+<!--        <Dir :dir="slotProps.data.parent"/>-->
+<!--      </template>-->
+<!--    </Column>-->
 
     <Column headerClass="column-state" bodyClass="column-state">
       <template #body="slotProps">

@@ -14,7 +14,7 @@
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <Filters class="p-my-1" :state="state.filters" @search="docSearch"/>
+    <Filters class="p-my-1" :state="state.filters" @search="docSearch" @filter="docFilter"/>
 
     <Docs :docs="kept.docs"
           :dir="dirCurrent"
@@ -138,6 +138,10 @@ export default {
   },
 
   methods: {
+    docFilter() {
+      console.log('docFilter');
+    },
+
     docSearch() {
       storageClient.docs({
         parent: this.dirCurrent ? this.dirCurrent.id || null : null,

@@ -49,7 +49,41 @@ class FiltersState extends Filter {
             loading: false,
             disabled: false,
             dynamic: false,
+
+            search: {
+                loading: false,
+                disabled: false,
+            },
+
+            filter: {
+                loading: false,
+                disabled: false,
+            },
         };
+    }
+
+    searchStart() {
+        this.state.search.loading = true;
+        this.state.search.disabled = true;
+        this.state.filter.disabled = true;
+    };
+
+    searchStop() {
+        this.state.search.loading = false;
+        this.state.search.disabled = false;
+        this.state.filter.disabled = false;
+    }
+
+    filterStart() {
+        this.state.filter.loading = true;
+        this.state.search.disabled = true;
+        this.state.filter.disabled = true;
+    }
+
+    filterStop() {
+        this.state.filter.loading = false;
+        this.state.search.disabled = false;
+        this.state.filter.disabled = false;
     }
 
     loadingOn() {
