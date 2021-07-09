@@ -37,6 +37,12 @@
       </template>
     </Column>
 
+    <Column field="polygons" header="Polygons">
+      <template #body="slotProps">
+        {{ slotProps.data.props.polygons  }}
+      </template>
+    </Column>
+
     <Column field="size" header="Size">
       <template #body="slotProps">
         {{ sizeFormat(slotProps.data.props.size)  }}
