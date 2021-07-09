@@ -135,8 +135,17 @@ export default {
         makeFile: this.dirCurrent && this.dirCurrent.id,
       };
     },
+
     dirCurrent() {
       return this.nav.dirs.slice(-1).pop();
+    },
+  },
+
+  watch: {
+    /** @param {StorageDir|null} dir */
+    dirCurrent(dir) {
+      if (dir) this.state.filters.input.dirId = dir.id;
+      else this.state.filters.input.dirId = null;
     },
   },
 
@@ -227,9 +236,7 @@ export default {
             this.state.docRemove.stop();
           });
     },
-    /**
-     * @param {StorageDoc} doc
-     */
+    /** @param {StorageDoc} doc */
     docEdit(doc) {
       this.errors.doc = {};
       this.input.original.doc = doc;
