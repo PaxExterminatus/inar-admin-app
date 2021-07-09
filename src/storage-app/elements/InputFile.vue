@@ -1,5 +1,5 @@
 <template>
-  <ErrorLine class="input-file input-line" :errors="errors['name'] || errors['file']">
+  <ErrorLine class="input-file input-line" :errors="errors['item.name'] || errors['item.file']">
 
     <label for="name">File</label>
     <div class="p-inputgroup">

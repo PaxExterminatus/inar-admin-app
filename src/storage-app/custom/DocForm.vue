@@ -6,7 +6,7 @@
 
         <InputFile @file="select" :errors="errors" v-model="doc.name" @validate="validateFile"/>
 
-        <ErrorLine class="input-line" :errors="errors['props.size']">
+        <ErrorLine class="input-line" :errors="errors['item.props.size']">
           <InputFileSize v-model="doc.props.size" :disabled="!!doc.file" :sync="!doc.file">
             File size
             <Tag severity="info" icon="pi pi-info-circle" class="p-m-lg-auto" v-tooltip.top="'File size limit'" :value="fileSize(dir.maxSize).format()"/>
@@ -19,7 +19,7 @@
           </template>
         </ErrorLine>
 
-        <ErrorLine class="input-line" :errors="errors['props.polygons']">
+        <ErrorLine class="input-line" :errors="errors['item.props.polygons']">
           <label for="polygons">
             Polygons
             <Tag severity="info" icon="pi pi-info-circle" class="p-m-lg-auto" v-tooltip.top="'Polygons limit'" :value="dir.maxPolygons"/>
@@ -33,7 +33,7 @@
           </template>
         </ErrorLine>
 
-        <ErrorLine class="input-line" :errors="errors['props.type']">
+        <ErrorLine class="input-line" :errors="errors['item.props.type']">
           <label for="polygons">Type</label>
           <Dropdown v-model="doc.props.type" :options="typeOptions" optionLabel="name" optionValue="code"/>
         </ErrorLine>
@@ -41,7 +41,7 @@
 
       <TabPanel header="Cover">
 
-        <ErrorLine class="input-line" :errors="errors['props.preview'] || errors['preview']">
+        <ErrorLine class="input-line" :errors="errors['item.props.preview'] || errors['item.preview']">
           <label for="url">Preview</label>
           <div class="input-image">
             <div class="product-preview" >
@@ -65,7 +65,7 @@
           <span class="p-tag">OR</span>
         </Divider>
 
-        <ErrorLine class="input-line" :errors="errors['props.url']">
+        <ErrorLine class="input-line" :errors="errors['item.props.url']">
           <div class="input-image">
             <div class="product-preview" >
               <img class="image-box" v-if="doc.props.url" :src="doc.props.url" alt="Model Cover">
@@ -86,22 +86,22 @@
       </TabPanel>
 
       <TabPanel header="Description">
-        <ErrorLine class="input-line" :errors="errors['props.description']">
+        <ErrorLine class="input-line" :errors="errors['item.props.description']">
           <label for="description">Description</label>
           <Textarea id="description" v-model="doc.props.description" :autoResize="true"/>
         </ErrorLine>
 
-        <ErrorLine class="input-line" :errors="errors['props.note']">
+        <ErrorLine class="input-line" :errors="errors['item.props.note']">
           <label for="note">Note</label>
           <InputText id="note" v-model="doc.props.note"/>
         </ErrorLine>
 
-        <ErrorLine class="input-line" :errors="errors['props.topic']">
+        <ErrorLine class="input-line" :errors="errors['item.props.topic']">
           <label for="Topic">Topic</label>
           <InputText id="topic" v-model="doc.props.topic"/>
         </ErrorLine>
 
-        <ErrorLine class="input-line" :errors="errors['props.thesis']">
+        <ErrorLine class="input-line" :errors="errors['item.props.thesis']">
           <label for="Thesis">Thesis</label>
           <InputText id="thesis" v-model="doc.props.thesis"/>
         </ErrorLine>

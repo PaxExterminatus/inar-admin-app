@@ -19,6 +19,7 @@
     <Docs :docs="kept.docs"
           :dir="dirCurrent"
           :pagination="pagination.docs"
+          :showDir="!can.makeFile"
           @edit="docEdit"
           @request="docRequest"
           @remove="docRemoveDialog"
@@ -61,6 +62,7 @@ import { DirForm, DocForm, Docs, Dirs, filters } from './custom'
 import { StorageDir, StorageDoc } from './entity'
 import { Dir } from './elements';
 import FileSize from './services/FileSize'
+import Column from 'primevue/column'
 
 export default {
   components: {
@@ -73,6 +75,7 @@ export default {
     Dir,
     Toast,
     Divider,
+    Column,
     ...filters.components,
   },
 
