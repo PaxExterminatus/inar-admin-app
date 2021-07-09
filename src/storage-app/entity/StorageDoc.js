@@ -41,16 +41,11 @@ class StorageDoc extends StorageItem {
     this.preview = preview;
     this.polygons = 0;
 
-    if (parent) {
-      this.parent = new StorageDir({
-        id: parent.id,
-        parent_id: parent.parent_id,
-        name:  parent.name,
-        state: 'kept',
-        size: parent.size,
-        props: parent.props,
-      });
-    }
+    if (parent) this.parentSet(parent);
+  }
+
+  parentSet({id, parent_id, name, size, props}) {
+    this.parent = new StorageDir({id, parent_id, name, state: 'kept', size, props});
   }
 
   /**
@@ -82,12 +77,10 @@ class StorageDoc extends StorageItem {
    * @return {StorageDoc}
    */
   fill(doc) {
+    console.log('fill', doc);
     super.fill(doc);
-    this.id = doc.id;
-    this.parent_id = doc.parent_id;
-    this.name = doc.name;
-    this.size = doc.size;
-    this.state = doc.state;
+    this.makeProps(doc.props);
+    this.parent = new StorageDir(doc.parent);
   }
 
   copy() {

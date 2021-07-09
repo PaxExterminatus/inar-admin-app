@@ -103,6 +103,9 @@ export default {
       input: {
         dir: StorageDir.empty(),
         doc: StorageDoc.empty(),
+        original: {
+          doc: StorageDir.empty(),
+        },
       },
 
       errors: {
@@ -212,6 +215,7 @@ export default {
      */
     docEdit(doc) {
       this.errors.doc = {};
+      this.input.original.doc = doc;
       this.input.doc = doc.copy();
       this.state.docEditor.open();
     },
@@ -231,16 +235,26 @@ export default {
 
     docSave() {
       this.errors.doc = {};
-      storageClient.save(this.input.doc)
+      const doc = this.input.doc;
+      storageClient.save({
+        item: doc,
+        filter: this.state.filters.input,
+        pagination: {
+          page: 1,
+          per: 15,
+        },
+      })
           .then(r => {
             this.acceptStorageData(r.data);
-            this.input.doc.id = r.data.item.id;
-            if (r.data.parent) {
-              this.dirCurrent.props.over = r.data.parent.props.over;
-            }
-            if (this.input.doc.file || this.input.doc.preview)
+
+            doc.fill(r.data.item);
+            this.input.original.doc.fill(r.data.item)
+
+            if (r.data.parent) doc.parentSet(r.data.parent);
+
+            if (doc.file || doc.preview)
             {
-              storageClient.upload(this.input.doc, this.uploadProgress)
+              storageClient.upload(doc, this.uploadProgress)
                   .then(r => {
                     this.state.docEditor.close();
                     this.input.doc = StorageDoc.empty();
@@ -262,6 +276,7 @@ export default {
             }
           })
           .catch(e => {
+            console.error(e);
             this.errors.doc = e.response.data.errors;
             this.$toast.add({severity:'error', summary: e.response.data.message, life: 3000});
             this.state.docEditor.stop();
@@ -288,7 +303,14 @@ export default {
 
     dirSave() {
       this.errors.dir = [];
-      storageClient.save(this.input.dir)
+      storageClient.save({
+        item: this.input.dir,
+        filter: this.state.filters.input,
+        pagination: {
+          page: 1,
+          per: 15,
+        },
+      })
           .then(r => {
             this.acceptStorageData(r.data);
             this.state.dirEditor.close();

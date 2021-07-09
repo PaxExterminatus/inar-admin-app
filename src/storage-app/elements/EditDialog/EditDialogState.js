@@ -30,6 +30,8 @@ class EditDialogState {
     }
 
     open() {
+        this.stop();
+        this.enable();
         this.options.show = true;
     }
     close() {

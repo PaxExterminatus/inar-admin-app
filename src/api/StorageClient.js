@@ -94,10 +94,12 @@ class StorageClient {
 
   /**
    * @param {StorageItem} item
+   * @param filter
+   * @param pagination
    * @return {Promise<StorageSaveResponse>}
    */
-  save(item) {
-    return axios.put('/storage', item);
+  save({item, filter, pagination}) {
+    return axios.put('/storage', {item, filter, pagination});
   }
 
   /**

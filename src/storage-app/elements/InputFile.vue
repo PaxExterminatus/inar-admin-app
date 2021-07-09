@@ -7,8 +7,8 @@
       <Button title="Select file" icon="pi pi-folder-open" @click="storageFileInputOpen"/>
     </div>
 
-    <template #tags v-if="inputFilename && hasError">
-      <Tag v-tooltip.top="'Invalid file extension, expected .obj or .fbx'" icon="pi pi-exclamation-triangle" severity="danger" :value="`.${extension}`"></Tag>
+    <template #tags>
+      <Tag icon="pi pi-info-circle" severity="info" :value="`.${extension}`"></Tag>
     </template>
 
     <input type="file" ref="storageFileInput" hidden @change="storageFileInputChange">
@@ -51,8 +51,8 @@ export default {
 
   watch: {
     modelValue(filename) {
-      this.hasError = !['obj', 'fbx'].includes(this.extension);
-      this.$emit('validate', this.hasError);
+      //this.hasError = !['obj', 'fbx'].includes(this.extension);
+      //this.$emit('validate', this.hasError);
     },
     inputFilename(filename) {
       this.$emit('update:modelValue', filename);
