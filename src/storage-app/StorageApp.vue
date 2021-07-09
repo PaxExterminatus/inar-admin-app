@@ -198,7 +198,14 @@ export default {
       this.state.docRemove.open();
     },
     docRemove() {
-      storageClient.delete(this.input.doc.id)
+      storageClient.delete({
+        id: this.input.doc.id,
+        filter: this.state.filters.input,
+        pagination: {
+          per: 15,
+          page: 1,
+        },
+      })
           .then(r => {
             this.acceptStorageData(r.data);
             this.state.docRemove.close();

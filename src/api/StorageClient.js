@@ -133,10 +133,18 @@ class StorageClient {
 
   /**
    * @param {string} id
+   * @param {FilterInput} filter
+   * @param {Object} pagination
    * @return Promise<StorageGetResponse>
    */
-  delete(id) {
-    return axios.delete(`/storage/${id}`);
+  delete({id, filter, pagination}) {
+    const filter64 = btoa(JSON.stringify(filter));
+    const pagination64 = btoa(JSON.stringify(pagination));
+    const params = {
+      filter: filter64,
+      pagination: pagination64,
+    };
+    return axios.delete(`/storage/${id}`, {params});
   }
 
   static make() {
