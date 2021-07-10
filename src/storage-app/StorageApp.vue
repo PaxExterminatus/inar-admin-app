@@ -152,8 +152,8 @@ export default {
     docSearch() {
       this.pagination.docs.first = 0;
       this.pagination.docs.page = 1;
+      this.state.filters.input.dirId = this.dirCurrent ? this.dirCurrent.id || null : null;
       storageClient.docs({
-        parent: this.dirCurrent ? this.dirCurrent.id || null : null,
         filter: this.state.filters.input,
         pagination: this.pagination.docs,
       })
