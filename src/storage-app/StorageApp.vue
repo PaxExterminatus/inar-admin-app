@@ -242,10 +242,7 @@ export default {
       storageClient.save({
         item: doc,
         filter: this.state.filters.input,
-        pagination: {
-          page: 1,
-          per: 15,
-        },
+        pagination: this.pagination.docs,
       })
           .then(r => {
             this.acceptStorageData(r.data);
@@ -311,7 +308,7 @@ export default {
         filter: this.state.filters.input,
         pagination: {
           page: 1,
-          per: 15,
+          per: 10,
         },
       })
           .then(r => {
@@ -375,7 +372,7 @@ export default {
         filter: this.state.filters.input,
         pagination: {
           page: 1,
-          per: 15,
+          per: 10,
         },
       }).then(r => {
         this.acceptStorageData(r.data)
@@ -392,7 +389,7 @@ export default {
         filter: this.state.filters.input,
         pagination: {
           page: 1,
-          per: 15,
+          per: 10,
         },
       }).then(r => {
         this.acceptStorageData(r.data)
