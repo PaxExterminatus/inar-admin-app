@@ -63,7 +63,7 @@ let uploadCancelTokenSource = axios.CancelToken.source();
 
 class StorageClient {
   /**
-   * @param {Object} pagination
+   * @param {{page: number, per: number}} pagination
    * @param {Object} filter
    * @param {?string} parent
    * @return {Promise<AxiosResponse<any>>}
@@ -74,6 +74,7 @@ class StorageClient {
     return axios.get(`/storage/docs`, {
       params:
           {
+            page: pagination.page,
             filter: filter64,
             pagination: pagination64,
             parent: parent

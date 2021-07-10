@@ -15,15 +15,10 @@
 
     <Dirs :dirs="kept.dirs" @select="dirSelect" @open="dirOpen"/>
 
-    <Filters class="p-my-1" :state="state.filters" @search="docSearch" @filter="docFilter"/>
+    <Filters class="p-my-1" :state="state.filters" @search="docSearch"/>
 
-    <Docs :docs="kept.docs"
-          :dir="dirCurrent"
-          :pagination="pagination.docs"
-          :showDir="!can.makeFile"
-          @edit="docEdit"
-          @request="docRequest"
-          @remove="docRemoveDialog"
+    <Docs :docs="kept.docs" :dir="dirCurrent" :pagination="pagination.docs" :showDir="!can.makeFile"
+          @edit="docEdit" @request="docRequest" @remove="docRemoveDialog"
     />
 
     <EditDialog :state="state.dirEditor" @save="dirSave">
@@ -137,6 +132,7 @@ export default {
     },
 
     dirCurrent() {
+      this.state.filters.input.search = false;
       return this.nav.dirs.slice(-1).pop();
     },
   },
@@ -150,16 +146,12 @@ export default {
   },
 
   methods: {
-    docFilter() {
-      console.log('docFilter');
-    },
-
     docSearch() {
       storageClient.docs({
         parent: this.dirCurrent ? this.dirCurrent.id || null : null,
         filter: this.state.filters.input,
         pagination: {
-          per: 15,
+          per: 10,
           page: 1,
         },
       })
@@ -193,11 +185,11 @@ export default {
         filter: this.state.filters.input,
         pagination: {
           per: onPageEvent.rows,
-          page: onPageEvent.page,
+          page: onPageEvent.page + 1,
         },
       })
           .then(r => {
-            this.kept.docs = r.data.docs.data;
+            this.acceptStorageData(r.data)
           })
           .catch(e => {
 

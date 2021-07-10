@@ -1,5 +1,5 @@
 <template>
-  <Dialog class="filters-components" header="Search" v-model:visible="st.state.show" position="right">
+  <Dialog class="filters-components" header="Search" v-model:visible="st.state.show" position="left">
     <label>File Name</label>
     <div class="p-inputgroup">
       <InputText placeholder="Name" v-model="st.input.name" @keyup.enter="search"/>
@@ -78,11 +78,8 @@ export default {
   methods: {
     search() {
       this.st.searchStart();
+      this.st.input.search = true;
       this.$emit('search');
-    },
-    filter() {
-      this.st.filterStart();
-      this.$emit('filter');
     },
     clear() {
       this.st.clear();
@@ -94,7 +91,7 @@ export default {
 <style lang="sass">
 .filters-components
   height: 100vh
-  width: 300px
+  width: 250px
   padding: 0 !important
   background-color: #FFF
   .p-dialog-content

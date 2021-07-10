@@ -77,7 +77,6 @@ class StorageDoc extends StorageItem {
    * @return {StorageDoc}
    */
   fill(doc) {
-    console.log('fill', doc);
     super.fill(doc);
     this.makeProps(doc.props);
     this.parent = new StorageDir(doc.parent);
