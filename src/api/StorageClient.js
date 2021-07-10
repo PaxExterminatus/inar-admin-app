@@ -111,9 +111,11 @@ class StorageClient {
   /**
    * @param {StorageDoc} doc
    * @param {function} onUploadProgress
+   * @param filter
+   * @param pagination
    * @return Promise<StorageGetResponse>
    */
-  upload(doc, onUploadProgress) {
+  upload(doc, onUploadProgress, {filter, pagination}) {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -128,6 +130,8 @@ class StorageClient {
     if (doc.file) form.append('file', doc.file);
     if (doc.preview) form.append('preview', doc.preview);
     if (doc.name) form.append('filename', doc.name);
+    if (filter) form.append('filter', btoa(JSON.stringify(filter)));
+    if (pagination) form.append('pagination', btoa(JSON.stringify(pagination)));
 
     return axios.post('/storage', form, config);
   }

@@ -253,7 +253,10 @@ export default {
 
             if (doc.file || doc.preview)
             {
-              storageClient.upload(doc, this.uploadProgress)
+              storageClient.upload(doc, this.uploadProgress, {
+                filter: this.state.filters.input,
+                pagination: this.pagination.docs,
+              })
                   .then(r => {
                     this.state.docEditor.close();
                     this.input.doc = StorageDoc.empty();
