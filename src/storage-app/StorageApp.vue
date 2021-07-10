@@ -1,6 +1,5 @@
 <template>
   <div class="storage-app">
-    <div>{{pagination.docs}}</div>
     <Dirs :dirs="nav.dirs" @select="dirOpenNav">
       <Dir :dir="root" @select="rootSelect"/>
     </Dirs>
