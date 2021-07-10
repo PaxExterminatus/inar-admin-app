@@ -1,6 +1,11 @@
 <template>
-  <DataTable class="storage-files p-datatable-sm" :value="docs" :paginator="true" :rows="10"
-      :totalRecords="pagination.total" :lazy="true" @page="onPage($event)"
+  <DataTable class="storage-files p-datatable-sm"
+             :value="docs" :paginator="true"
+             :rows="10"
+             :totalRecords="pagination.total"
+             :lazy="true"
+             @page="onPage($event)"
+             v-model:first="pagination.first"
   >
 <!--    <Column field="parent" header="Folder" v-if="showDir">-->
 <!--      <template #body="slotProps">-->
@@ -99,7 +104,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    pagination: {
+    paginator: {
       type: Object,
       default: () => ({}),
     },
@@ -120,6 +125,17 @@ export default {
   computed: {
     copyIcon() {
       return this.state.copied ? 'pi pi-check' : 'pi pi-copy';
+    },
+    /**
+     * @return {{
+     *   page: number
+     *   first: number
+     *   total: number
+     *   per: number
+     * }|Object}
+     */
+    pagination() {
+      return this.paginator;
     },
   },
 
@@ -160,8 +176,23 @@ export default {
     sizeFormat(bytes) {
       return FileSize.inBytes(bytes).format();
     },
-    onPage(ev) {
-      this.$emit('request', ev);
+    /**
+     * @param {{
+     *   page: number
+     *   pageCount: number
+     *   rows: number
+     *   sortField: any
+     *   sortOrder: any
+     *   originalEvent: Object
+     *   multiSortMeta: Object
+     *   first: number
+     *   filters: Object
+     * }} pageEvent
+     */
+    onPage(pageEvent) {
+      this.pagination.page = pageEvent.page + 1;
+      this.pagination.per = pageEvent.rows;
+      this.$emit('request', pageEvent);
     },
     capitalize(s) {
       return s[0].toUpperCase() + s.slice(1);

@@ -1,5 +1,6 @@
 <template>
   <div class="storage-app">
+    <div>{{pagination.docs}}</div>
     <Dirs :dirs="nav.dirs" @select="dirOpenNav">
       <Dir :dir="root" @select="rootSelect"/>
     </Dirs>
@@ -17,7 +18,7 @@
 
     <Filters class="p-my-1" :state="state.filters" @search="docSearch"/>
 
-    <Docs :docs="kept.docs" :dir="dirCurrent" :pagination="pagination.docs" :showDir="!can.makeFile"
+    <Docs :docs="kept.docs" :dir="dirCurrent" :paginator="pagination.docs" :showDir="!can.makeFile"
           @edit="docEdit" @request="docRequest" @remove="docRemoveDialog"
     />
 
@@ -98,6 +99,9 @@ export default {
       pagination: {
         docs: {
           total: 0,
+          first: 0,
+          page: 1,
+          per: 15,
         },
       },
 
@@ -147,13 +151,12 @@ export default {
 
   methods: {
     docSearch() {
+      this.pagination.docs.first = 0;
+      this.pagination.docs.page = 1;
       storageClient.docs({
         parent: this.dirCurrent ? this.dirCurrent.id || null : null,
         filter: this.state.filters.input,
-        pagination: {
-          per: 10,
-          page: 1,
-        },
+        pagination: this.pagination.docs,
       })
           .then(r => {
             this.acceptStorageData(r.data);
@@ -166,27 +169,11 @@ export default {
           });
     },
 
-    /**
-     * @param {{
-     *   page: number
-     *   pageCount: number
-     *   rows: number
-     *   sortField: any
-     *   sortOrder: any
-     *   originalEvent: Object
-     *   multiSortMeta: Object
-     *   first: number
-     *   filters: Object
-     * }} onPageEvent
-     */
-    docRequest(onPageEvent) {
+    docRequest() {
       storageClient.docs({
         parent: this.dirCurrent ? this.dirCurrent.id || null : null,
         filter: this.state.filters.input,
-        pagination: {
-          per: onPageEvent.rows,
-          page: onPageEvent.page + 1,
-        },
+        pagination: this.pagination.docs,
       })
           .then(r => {
             this.acceptStorageData(r.data)
@@ -359,6 +346,7 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirOpen(dir) {
+      this.pagination.docs.first = 0;
       this.input.dir = StorageDir.empty();
       this.getStorageDir(dir);
       this.nav.dirs.forEach(iDir => {
@@ -369,6 +357,7 @@ export default {
     },
     /** @param {StorageDir} dir */
     dirOpenNav(dir) {
+      this.pagination.docs.first = 0;
       this.state.filters.dir = dir;
       this.input.dir = StorageDir.empty();
       this.getStorageDir(dir);
