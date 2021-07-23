@@ -312,10 +312,7 @@ export default {
       storageClient.save({
         item: this.input.dir,
         filter: this.state.filters.input,
-        pagination: {
-          page: 1,
-          per: 10,
-        },
+        pagination: this.pagination.docs,
       })
           .then(r => {
             this.acceptStorageData(r.data);
