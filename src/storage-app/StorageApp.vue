@@ -290,7 +290,11 @@ export default {
     },
 
     dirRemove() {
-      storageClient.delete(this.input.dir.id)
+      storageClient.delete({
+        id: this.input.dir.id,
+        filter: this.state.filters.input,
+        pagination: this.pagination.docs,
+      })
           .then(r => {
             this.acceptStorageData(r.data);
             this.state.dirRemove.close();
