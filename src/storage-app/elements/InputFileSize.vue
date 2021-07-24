@@ -1,13 +1,16 @@
 <template>
   <div>
     <label>
-      <slot></slot> {{ sizeFormat }}
+      <slot></slot>
     </label>
     <div class="p-inputgroup">
       <div class="p-inputgroup-addon" v-tooltip.top="'Megabytes'">MB</div>
       <span class="p-inputnumber p-component p-inputwrapper p-inputwrapper-filled p-inputnumber-buttons-stacked">
         <input class="p-inputtext p-component p-inputnumber-input" v-model="sizeInput" :disabled="disabled">
       </span>
+      <div class="p-inputgroup-addon" v-if="sizeFormat">
+        {{sizeFormat}}
+      </div>
     </div>
   </div>
 
@@ -53,7 +56,7 @@ export default {
     },
     sizeFormat() {
       const size = FileSize.inBytes(this.modelValue).size()
-      return size.order === 0 || size.order === 2 ? '' : `(or ${size.value}${size.unit})`;
+      return size.order === 0 ? '' : `${size.value} ${size.unit}`;
     },
   },
 }
