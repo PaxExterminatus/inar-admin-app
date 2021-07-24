@@ -56,7 +56,7 @@ export default {
     },
     sizeFormat() {
       const size = FileSize.inBytes(this.modelValue).size()
-      return size.order === 0 ? '' : `${size.value} ${size.unit}`;
+      return size.order === 0 ? '' : `${size.value}${size.unit}`;
     },
   },
 }
