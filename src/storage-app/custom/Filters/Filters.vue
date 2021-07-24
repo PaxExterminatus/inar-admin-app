@@ -31,9 +31,9 @@
       <Button class="p-button-secondary p-button-text" icon="pi pi-filter-slash" @click="clear" v-tooltip.left="'Clear'"/>
     </div>
 
-    <div class="actions2">
-      <ToggleButton class="action" onIcon="pi pi-cog" offIcon="pi pi-cog" v-model="st.state.dynamic" v-tooltip.left="'Send request automatically after changing filter value'"/>
-    </div>
+<!--    <div class="actions2">-->
+<!--      <ToggleButton class="action" onIcon="pi pi-cog" offIcon="pi pi-cog" v-model="st.state.dynamic" v-tooltip.left="'Send request automatically after changing filter value'"/>-->
+<!--    </div>-->
   </Dialog>
 </template>
 

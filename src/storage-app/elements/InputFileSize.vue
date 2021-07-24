@@ -5,7 +5,9 @@
     </label>
     <div class="p-inputgroup">
       <div class="p-inputgroup-addon" v-tooltip.top="'Megabytes'">MB</div>
-      <InputNumber v-model="sizeInput" showButtons :min="0" :disabled="disabled"/>
+      <span class="p-inputnumber p-component p-inputwrapper p-inputwrapper-filled p-inputnumber-buttons-stacked">
+        <input class="p-inputtext p-component p-inputnumber-input" v-model="sizeInput" :disabled="disabled">
+      </span>
     </div>
   </div>
 
@@ -40,11 +42,13 @@ export default {
   computed: {
     sizeInput: {
       get() {
-        return this.modelValue / Math.pow(1024, 2);
+        return this.modelValue / (1024 * 1024);
       },
       set(val) {
-        const sizeInBytes = val * Math.pow(1024, 2);
-        this.$emit('update:modelValue', sizeInBytes);
+        if (this.modelValue !== val) {
+          const sizeInBytes = val * (1024 * 1024);
+          this.$emit('update:modelValue', sizeInBytes);
+        }
       },
     },
     sizeFormat() {
