@@ -198,10 +198,7 @@ export default {
       storageClient.delete({
         id: this.input.doc.id,
         filter: this.state.filters.input,
-        pagination: {
-          per: 15,
-          page: 1,
-        },
+        pagination: this.pagination.docs,
       })
           .then(r => {
             this.acceptStorageData(r.data);
